@@ -27,29 +27,47 @@ $f3->route('GET /admin',
 /**
  * Users
  */
-$f3->route('GET /profile',
+$f3->route('GET /profil',
     function($f3, $params){
-        require 'controller/user/Profile.php';
+        require CONTROLLER . 'user/Profile.php';
         $page = new Profile();
     }
 );
 
-$f3->route('GET /profile/@user',
+$f3->route('GET /inscription',
     function($f3, $params){
-        require 'views/profile.php';
+        $f3->set('action', 'register_form');
+        require CONTROLLER . 'user/Profile.php';
+        $page = new Profile();
     }
 );
+
+$f3->route('POST /inscription',
+    function($f3, $params){
+        $f3->set('action', 'register_submit');
+        require CONTROLLER . 'user/Profile.php';
+        $page = new Profile();
+    }
+);
+
+// Access another user's page
+// $f3->route('GET /profil/@user',
+//     function($f3, $params){
+//         require CONTROLLER . 'user/Profile.php';
+//         $page = new Profile($params['user']);
+//     }
+// );
 
 /**
  * Products
  */
-$f3->route('GET /@marque',
+$f3->route('GET /marques/@marque',
     function($f3, $params){
 
     }
 );
 
-$f3->route('GET /@marque/@product',
+$f3->route('GET /marques/@marque/@product',
     function($f3, $params){
 
     }

@@ -4,6 +4,7 @@ require MODEL . 'data/session.php';
 require 'vendor/autoload.php';
 
 $f3 = \Base::instance();
+var_dump($_GET);
 
 /** 
  * Home page
@@ -47,6 +48,13 @@ $f3->route('POST /inscription',
         $f3->set('action', 'register_submit');
         require CONTROLLER . 'user/Profile.php';
         $page = new Profile();
+    }
+);
+
+$f3->route('GET /confirm_register*',
+    function($f3, $params){
+        $f3->set('action', 'register_confirm');
+        echo "yes";
     }
 );
 

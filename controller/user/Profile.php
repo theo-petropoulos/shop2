@@ -39,20 +39,13 @@
                                 require VIEW . 'error/error.php';
                                 break;
                             case 'user_exists':
-                                $error = ['origin' => 'register', 'message' => 'Cette adresse mail est déjà utilisée. Veuillez 
+                                $error = ['origin' => 'register', 'message' => 'Cette adresse mail et/ou ce numéro de téléphone sont déjà utilisés. Veuillez 
                                 <a href="inscription">réessayer</a>.<br><a href="reset-password">Réinitiliser le mot de passe ?</a>'];
                                 require VIEW . 'error/error.php';
                                 break;
                             case 'register_success':
-                                $mail_address = $user->getHis('mail');
-                                $message = 'register';
-                                $firstname = $user->getHis('firstname');
-                                /**
-                                 * Add crypt ivs etc to db
-                                 */
                                 // $crypttime = urlencode(openssl_encrypt(time(), $cipher, $key2, OPENSSL_ZERO_PADDING, $iv));
-                                $link = URL . 'confirm_register&u=' . $user->getHis('id') . '&a=1&t=' . urlencode(md5(time()));
-                                require ROOT . 'mailer/mailer.php';
+                                
                                 $register_return = "L'inscription a bien été enregistrée. Un e-mail de confirmation va vous être envoyé.<br><a href='" . URL . "'>Accueil</a>";
                                 break;
                             default:

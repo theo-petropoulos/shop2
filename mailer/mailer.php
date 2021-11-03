@@ -18,7 +18,7 @@ if(isset($message) && $message){
             $title = 'Votre inscription sur la boutique';
             $content = file_get_contents(ROOT . 'mailer/mails/register.html');
             $content = str_replace('$link', $link, $content);
-            $content = str_replace('$login', $firstname, $content);
+            $content = str_replace('$firstname', $firstname, $content);
             break;
         case 'delaccount':
             $title = 'Désolés de vous voir partir';
@@ -52,7 +52,7 @@ $mail->Password = "Test123!";
 $mail->Port = 587;                                   
 
 $mail->From = "okko.network@gmail.com";
-$mail->FromName = "OKKO";
+$mail->FromName = "SHOP";
 
 $mail->smtpConnect(
     array(
@@ -64,7 +64,7 @@ $mail->smtpConnect(
     )
 );
 
-$mail->AddAddress($mail_address);
+$mail->AddAddress($address);
 $mail->WordWrap = 40; // set word wrap
 $mail->Encoding = 'base64';
 $mail->CharSet = "UTF-8";
@@ -76,9 +76,4 @@ $mail->Body = $content;
 $mail->AltBody = "Plain text"; //Text Body 
 
 if(!$mail->Send())
-{
-echo "Mailer Error: " . $mail->ErrorInfo;
-}
-else{
-
-}
+    echo "Mailer Error: " . $mail->ErrorInfo;

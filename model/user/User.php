@@ -83,34 +83,80 @@ class User extends Database{
             $crypted_time = urlencode(openssl_encrypt(
                 time(),
                 $algo,
-                $key1,
+                $key2,
                 OPENSSL_ZERO_PADDING,
-                $iv1
+                $iv2
             ));
             $stmt = self::$db->prepare(
                 'BEGIN;
                 INSERT INTO `clients` (`nom`, `prenom`, `mail`, `telephone`, `password`)
                 VALUES (?, ?, ?, ?, ?);
                 SELECT @user_id := LAST_INSERT_ID();
-                INSERT INTO `ips` (`id_user`, `address`) VALUES (@user_id, ?);
-                INSERT INTO `register` (`id_user`, `openssl_iv`, `openssl_key`) VALUES (@user_id, ?, ?);
-                INSERT INTO `time` (`id_user`, `openssl_iv`, `openssl_key`) VALUES (@user_id, ?, ?);
+                INSERT INTO `ips` (`id_client`, `address`) VALUES (@user_id, ?);
+                INSERT INTO `register` (`id_client`, `openssl_iv`, `openssl_key`) VALUES (@user_id, ?, ?);
+                INSERT INTO `time` (`id_client`, `openssl_iv`, `openssl_key`) VALUES (@user_id, ?, ?);
                 COMMIT;'
             );
             $stmt->execute(
                 [$this->lastname, $this->firstname, $this->mail, $this->phone, password_hash($this->password, PASSWORD_DEFAULT), 
                 $ip, base64_encode($iv1), base64_encode($key1), base64_encode($iv2), base64_encode($key2)]);
-
             /**
              * Generate mail's content
              */
             $message = 'register';
             $firstname = $this->firstname;
             $address = $this->mail;
-            $link = URL . 'confirm_register?m=' . $crypted_mail . '&a=1&t=' . $crypted_time . '&o=' . $this->mail;
+            $link = URL . 'inscription?m=' . $crypted_mail . '&a=1&t=' . $crypted_time . '&o=' . $this->mail;
             require ROOT . 'mailer/mailer.php';
             return 'register_success';
         }
+    }
+
+    public function confirmRegister(){
+        $stmt = self::$db->prepare(
+            'SELECT `id` FROM `clients` WHERE `mail` = ?;'
+        );
+        $stmt->execute([$this->mail]);
+        if(!empty($result = $stmt->fetch(PDO::FETCH_ASSOC))){
+            $stmt = self::$db->prepare(
+                'SELECT t.`openssl_iv` AS `time_iv`, t.`openssl_key` AS `time_key`, r.`openssl_iv` AS `register_iv`, r.`openssl_key` AS `register_key` 
+                FROM `time` t JOIN `register` r ON t.`id_client` = r.`id_client` 
+                WHERE t.`id_client` = ?'
+            );
+            $stmt->execute([$result['id']]);
+            $keychain = $stmt->fetch(PDO::FETCH_ASSOC);
+            $algo = 'AES-256-CTR';
+
+            $time = openssl_decrypt(
+                urldecode($_GET['t']),
+                $algo,
+                base64_decode($keychain['time_key']),
+                OPENSSL_ZERO_PADDING,
+                base64_decode($keychain['time_iv'])
+            );
+            $mail = openssl_decrypt(
+                urldecode($_GET['m']),
+                $algo,
+                base64_decode($keychain['register_key']),
+                OPENSSL_ZERO_PADDING,
+                base64_decode($keychain['register_iv'])
+            );
+
+            if($mail === $this->mail){
+                if(time() - intval($time) < 3600){
+                    $stmt = self::$db->prepare(
+                        'UPDATE `clients` 
+                        SET `active` = 1 
+                        WHERE `id` = ?'
+                    );
+                    $stmt->execute([$result['id']]);
+                    return 'valid_registration';
+                }
+                else return 'invalid_time';
+            }
+            else return 'invalid_mail';
+        }
+        else return 'user_not_found';
     }
 
     protected static function verifyPwd(string $password){

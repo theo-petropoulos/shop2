@@ -1,9 +1,9 @@
 <?php
 require '_config.php';
-require MODEL . 'data/session.php';
 require 'vendor/autoload.php';
-
 $f3 = \Base::instance();
+require CONTROLLER . 'data/Session.php';
+
 
 /** 
  * Home page
@@ -29,6 +29,15 @@ $f3->route('GET /admin',
  */
 $f3->route('GET /profil',
     function($f3){
+        $f3->set('action', 'login_form');
+        require CONTROLLER . 'user/Profile.php';
+        $page = new Profile();
+    }
+);
+
+$f3->route('POST /profil',
+    function($f3){
+        $f3->set('action', 'login_submit');
         require CONTROLLER . 'user/Profile.php';
         $page = new Profile();
     }

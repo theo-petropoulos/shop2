@@ -60,8 +60,16 @@ class User extends Database{
          */
         else{
             $ip = $_SERVER['REMOTE_ADDR'];
-            $algo = 'AES-256-CTR';
+            /**
+             * Remove previous entries of this ip address
+             */
+            $stmt = self::$db->prepare(
+                'DELETE FROM `ips`
+                WHERE `address` = ?'
+            );
+            $stmt->execute([$ip]);
 
+            $algo = 'AES-256-CTR';
             /**
              * Generate iv & key for user's mail encryption
              */
@@ -118,6 +126,9 @@ class User extends Database{
         );
         $stmt->execute([$this->mail]);
         if(!empty($result = $stmt->fetch(PDO::FETCH_ASSOC))){
+            /**
+             * Get Keys and IVs
+             */
             $stmt = self::$db->prepare(
                 'SELECT t.`openssl_iv` AS `time_iv`, t.`openssl_key` AS `time_key`, r.`openssl_iv` AS `register_iv`, r.`openssl_key` AS `register_key` 
                 FROM `time` t JOIN `register` r ON t.`id_client` = r.`id_client` 
@@ -125,8 +136,11 @@ class User extends Database{
             );
             $stmt->execute([$result['id']]);
             $keychain = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            /**
+             * Decipher GETs in URL
+             */
             $algo = 'AES-256-CTR';
-
             $time = openssl_decrypt(
                 urldecode($_GET['t']),
                 $algo,
@@ -142,7 +156,13 @@ class User extends Database{
                 base64_decode($keychain['register_iv'])
             );
 
+            /**
+             * If deciphered mail matches mail origin
+             */
             if($mail === $this->mail){
+                /**
+                 * If it's been less than 1 hour, activate account
+                 */
                 if(time() - intval($time) < 3600){
                     $stmt = self::$db->prepare(
                         'UPDATE `clients` 
@@ -157,6 +177,62 @@ class User extends Database{
             else return 'invalid_mail';
         }
         else return 'user_not_found';
+    }
+
+    public function login(){
+        $ip = $_SERVER['REMOTE_ADDR'];
+        /**
+         * Fetch password and all IPs related to the user
+         */
+        $stmt = self::$db->prepare(
+            'SELECT i.`address`, c.`password` FROM `ips` i 
+            INNER JOIN `clients` c ON c.`id` = i.`id_client` 
+            WHERE c.`mail` = ? GROUP BY c.`password`, i.`address`'
+        );
+        $stmt->execute([$this->mail]);
+        if($result = $stmt->fetchAll(PDO::FETCH_ASSOC)){
+            /**
+             * Trim results
+             */
+            $results = [];
+            $results['ip'] = [];
+            foreach($result as $key => $pair){
+                if(empty($results['password'])) $results['password'] = $pair['password'];
+                if(!empty($pair['address'])) array_push($results['ip'], $pair['address']);
+            }
+            /**
+             * Remove devices if there's more than 5 registered
+             */
+            if(count($results['ip']) > 5){
+                for($i = 0; $i < 3; $i++){
+                    $stmt = self::$db->prepare(
+                        'DELETE FROM `ips` 
+                        WHERE `address` = ?'
+                    );
+                    $stmt->execute([$results['ip'][$i]]);
+                }
+            }
+            if(password_verify($this->password, $results['password'])){
+                if(in_array($ip, $results['ip'])){
+                    /**
+                     * Generate user's token and store its hash into the database
+                     */
+                    $session = new Session();
+                    $this->authtoken = $session->giveCookie();
+                    $stmt = self::$db->prepare(
+                        'UPDATE `clients` 
+                        SET `authtoken` = ? 
+                        WHERE `mail` = ?'
+                    );
+                    $stmt->execute([$this->authtoken, $this->mail]);
+                    return 'login_success';
+                }
+                else{
+                    return 'new_device';
+                }
+            }
+        }
+        return 'invalid_login';
     }
 
     protected static function verifyPwd(string $password){

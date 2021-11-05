@@ -2,18 +2,39 @@
 require MODEL . 'data/Database.php';
 require MODEL . 'user/User.php';
 
-if(session_status() !== PHP_SESSION_ACTIVE)session_start();
-
-if(!empty($_COOKIE['authtoken'])){
-    $session = new Session($_COOKIE['authtoken']);
-}
-
 class Session extends Database{
 
     public function __construct($authtoken = NULL){
         parent::__construct();
         $this->authtoken = $authtoken;
         $this->ip = $_SERVER['REMOTE_ADDR'];
+    }
+
+    public function giveCookie(){
+        /**
+         * Generate hash
+         */
+        $date = (new DateTime())->getTimeStamp();
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $start = random_int(1000,9999);
+        $end = random_int(1000,9999);
+        $token = $start . "-" . $date . ":" . $ip . "+" . $end;
+        $iterations = random_int(30000,90000);
+        $salt = openssl_random_pseudo_bytes(16);
+        $hash = hash_pbkdf2("sha256", $token, $salt, $iterations, 32);
+        /**
+         * Set cookie for further authentications
+         */
+        $cookie_options = array(
+            'expires' => time() + 36000,
+            'path' => '/shop/',
+            'domain' => 'localhost',
+            'secure' => true,
+            'httponly' => false,
+            'samesite' => 'Strict'
+        );
+        setcookie('authtoken', $hash, $cookie_options);
+        return $hash;
     }
     
     // public function authenticate(){

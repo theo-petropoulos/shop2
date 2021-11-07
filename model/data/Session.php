@@ -24,7 +24,7 @@ class Session extends Database{
          */
         $cookie_options = array(
             'expires' => time() + 36000,
-            'path' => '/shop',
+            'path' => '/shop/',
             'domain' => 'localhost',
             'secure' => true,
             'httponly' => false,
@@ -46,20 +46,32 @@ class Session extends Database{
             $stmt->execute([$this->authtoken]);
             if($result = $stmt->fetchAll(PDO::FETCH_ASSOC)){
                 foreach($result as $key => $value)
-                    if($value['ip'] === $this->ip)
+                    if($value['ip'] === $this->ip){
+                        self::refreshCookie($this->authtoken);
                         return 1;
+                    } 
             }
-            else{
-                setcookie(
-                    'authtoken',
-                    '',
-                    -1,
-                    '/shop',
-                    'localhost'
-                );
-                return 0;
-            }
+            setcookie(
+                'authtoken',
+                '',
+                -1,
+                '/shop/',
+                'localhost'
+            );
+            return 0;
         }
         else return 0;
+    }
+
+    private static function refreshCookie($cookie){
+        $cookie_options = array(
+            'expires' => time() + 36000,
+            'path' => '/shop/',
+            'domain' => 'localhost',
+            'secure' => true,
+            'httponly' => false,
+            'samesite' => 'Strict'
+        );
+        setcookie('authtoken', $cookie, $cookie_options);
     }
 }

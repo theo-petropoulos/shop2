@@ -32,12 +32,12 @@ $f3->route('GET /profil',
     function($f3){
         $session = new Session();
         if($session->authenticate()){
-            echo "connect";
+            echo "connected";
         }
         else{
             $f3->set('action', 'login_form');
-            require CONTROLLER . 'user/Profile.php';
-            $page = new Profile();
+            require CONTROLLER . 'user/Connection.php';
+            $page = new Connection();
         }
     }
 );
@@ -45,26 +45,40 @@ $f3->route('GET /profil',
 $f3->route('POST /profil',
     function($f3){
         $f3->set('action', 'login_submit');
-        require CONTROLLER . 'user/Profile.php';
-        $page = new Profile();
+        require CONTROLLER . 'user/Connection.php';
+        $page = new Connection();
     }
 );
 
 $f3->route('GET /inscription*',
     function($f3){
-        if(!empty($_GET['o']) && !empty($_GET['m']) && !empty($_GET['a']) && !empty($_GET['t']))
-            $f3->set('action', 'register_confirm');
-        else $f3->set('action', 'register_form');
-        require CONTROLLER . 'user/Profile.php';
-        $page = new Profile();
+        $session = new Session();
+        if($session->authenticate()){
+            echo "already connected";
+        }
+        else{
+            if(!empty($_GET['o']) && !empty($_GET['m']) && !empty($_GET['a']) && !empty($_GET['t']))
+                $f3->set('action', 'register_confirm');
+            else $f3->set('action', 'register_form');
+            require CONTROLLER . 'user/Registration.php';
+            $page = new Registration();
+        }
     }
 );
 
 $f3->route('POST /inscription',
     function($f3){
         $f3->set('action', 'register_submit');
-        require CONTROLLER . 'user/Profile.php';
-        $page = new Profile();
+        require CONTROLLER . 'user/Registration.php';
+        $page = new Registration();
+    }
+);
+
+$f3->route('GET /connection',
+    function($f3){
+        $f3->set('action', 'login_confirm');
+        require CONTROLLER . 'user/Connection.php';
+        $page = new Connection();
     }
 );
 

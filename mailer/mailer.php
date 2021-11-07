@@ -12,13 +12,19 @@ require ROOT . '/vendor/autoload.php';
 
 $mail = new PHPMailer();
 
-if(isset($message) && $message){
-    switch($message){
+if(isset($table) && $table){
+    switch($table){
         case 'register':
             $title = 'Votre inscription sur la boutique';
             $content = file_get_contents(ROOT . 'mailer/mails/register.html');
             $content = str_replace('$link', $link, $content);
-            $content = str_replace('$firstname', $firstname, $content);
+            $content = str_replace('$firstname', $this->firstname, $content);
+            break;
+        case 'connect':
+            $title = 'Nouvelle connexion à votre compte';
+            $content = file_get_contents(ROOT . 'mailer/mails/connect.html');
+            $content = str_replace('$link', $link, $content);
+            $content = str_replace('$ip', $this->ip, $content);
             break;
         case 'delaccount':
             $title = 'Désolés de vous voir partir';
@@ -64,7 +70,7 @@ $mail->smtpConnect(
     )
 );
 
-$mail->AddAddress($address);
+$mail->AddAddress($this->mail);
 $mail->WordWrap = 40; // set word wrap
 $mail->Encoding = 'base64';
 $mail->CharSet = "UTF-8";

@@ -1,8 +1,7 @@
 <?php
+
+require MODEL . 'data/Database.php';
 require MODEL . 'data/Session.php';
+require MODEL . 'user/User.php';
 
-if(session_status() !== PHP_SESSION_ACTIVE) session_start();
-
-if(!empty($_COOKIE['authtoken'])){
-    $session = new Session($_COOKIE['authtoken']);
-}
+session_start();

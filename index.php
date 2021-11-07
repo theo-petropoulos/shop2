@@ -2,6 +2,7 @@
 require '_config.php';
 require 'vendor/autoload.php';
 $f3 = \Base::instance();
+$f3->set('JAR.domain', $_SERVER['HTTP_HOST']);
 require CONTROLLER . 'data/Session.php';
 
 
@@ -29,9 +30,15 @@ $f3->route('GET /admin',
  */
 $f3->route('GET /profil',
     function($f3){
-        $f3->set('action', 'login_form');
-        require CONTROLLER . 'user/Profile.php';
-        $page = new Profile();
+        $session = new Session();
+        if($session->authenticate()){
+            echo "connect";
+        }
+        else{
+            $f3->set('action', 'login_form');
+            require CONTROLLER . 'user/Profile.php';
+            $page = new Profile();
+        }
     }
 );
 

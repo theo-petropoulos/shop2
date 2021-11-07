@@ -1,6 +1,4 @@
 <?php
-require MODEL . 'data/Database.php';
-require MODEL . 'user/User.php';
 
 class Session extends Database{
 
@@ -15,10 +13,9 @@ class Session extends Database{
          * Generate hash
          */
         $date = (new DateTime())->getTimeStamp();
-        $ip = $_SERVER['REMOTE_ADDR'];
         $start = random_int(1000,9999);
         $end = random_int(1000,9999);
-        $token = $start . "-" . $date . ":" . $ip . "+" . $end;
+        $token = $start . "-" . $date . ":" . $this->ip . "+" . $end;
         $iterations = random_int(30000,90000);
         $salt = openssl_random_pseudo_bytes(16);
         $hash = hash_pbkdf2("sha256", $token, $salt, $iterations, 32);
@@ -27,7 +24,7 @@ class Session extends Database{
          */
         $cookie_options = array(
             'expires' => time() + 36000,
-            'path' => '/shop/',
+            'path' => '/shop',
             'domain' => 'localhost',
             'secure' => true,
             'httponly' => false,
@@ -37,15 +34,32 @@ class Session extends Database{
         return $hash;
     }
     
-    // public function authenticate(){
-    //     $stmt = self::$db->prepare(
-    //         'SELECT i.address AS `ip` FROM ips i
-    //         INNER JOIN users u ON i.id_user=u.id 
-    //         WHERE u.authtoken = ?'
-    //     );
-    //     $stmt->execute([$this->authtoken]);
-    //     $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    //     if(isset($result['ip']) && $this->ip == $result['ip']) return 'validtoken';
-    //     else return 'invalidtoken';
-    // }
+    public function authenticate(){
+        if(!empty($_COOKIE['authtoken'])){
+            $this->authtoken = $_COOKIE['authtoken'];
+            $this->ip = $_SERVER['REMOTE_ADDR'];
+            $stmt = self::$db->prepare(
+                'SELECT i.`address` AS `ip` FROM `ips` i
+                INNER JOIN `clients` c ON i.`id_client` = c.`id`
+                WHERE c.`authtoken` = ?'
+            );
+            $stmt->execute([$this->authtoken]);
+            if($result = $stmt->fetchAll(PDO::FETCH_ASSOC)){
+                foreach($result as $key => $value)
+                    if($value['ip'] === $this->ip)
+                        return 1;
+            }
+            else{
+                setcookie(
+                    'authtoken',
+                    '',
+                    -1,
+                    '/shop',
+                    'localhost'
+                );
+                return 0;
+            }
+        }
+        else return 0;
+    }
 }

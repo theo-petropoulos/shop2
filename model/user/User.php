@@ -83,53 +83,53 @@ class User extends Database{
                 WHERE t.`id_client` = ?'
             );
             $stmt->execute([$result['id']]);
-            $keychain = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            /**
-             * Decipher GETs in URL
-             */
-            $algo = 'AES-256-CTR';
-            $time = openssl_decrypt(
-                urldecode($_GET['t']),
-                $algo,
-                base64_decode($keychain['time_key']),
-                OPENSSL_ZERO_PADDING,
-                base64_decode($keychain['time_iv'])
-            );
-            $mail = openssl_decrypt(
-                urldecode($_GET['m']),
-                $algo,
-                base64_decode($keychain['register_key']),
-                OPENSSL_ZERO_PADDING,
-                base64_decode($keychain['register_iv'])
-            );
-
-            /**
-             * If deciphered mail matches mail origin
-             */
-            if($mail === $this->mail){
+            if(!empty($keychain = $stmt->fetch(PDO::FETCH_ASSOC))){
                 /**
-                 * If it's been less than 1 hour, activate account
+                 * Decipher GETs in URL
                  */
-                if(time() - intval($time) < 3600){
-                    $stmt = self::$db->prepare(
-                        'UPDATE `clients` 
-                        SET `active` = 1 
-                        WHERE `id` = ?;'
-                    );
-                    $stmt->execute([$result['id']]);
-                    $stmt = self::$db->prepare(
-                        'DELETE FROM `register`
-                        WHERE `id_client` = ?;
-                        DELETE FROM `time`
-                        WHERE `id_client` = ?;'
-                    );
-                    $stmt->execute([$result['id']]);
-                    return 'valid_registration';
+                $algo = 'AES-256-CTR';
+                $time = openssl_decrypt(
+                    rawurldecode($_GET['t']),
+                    $algo,
+                    base64_decode($keychain['time_key']),
+                    OPENSSL_ZERO_PADDING,
+                    base64_decode($keychain['time_iv'])
+                );
+                $mail = openssl_decrypt(
+                    rawurldecode($_GET['m']),
+                    $algo,
+                    base64_decode($keychain['register_key']),
+                    OPENSSL_ZERO_PADDING,
+                    base64_decode($keychain['register_iv'])
+                );
+                /**
+                 * If deciphered mail matches mail origin
+                 */
+                if($mail === $this->mail){
+                    /**
+                     * If it's been less than 1 hour, activate account
+                     */
+                    if(time() - intval($time) < 3600){
+                        $stmt = self::$db->prepare(
+                            'UPDATE `clients` 
+                            SET `active` = 1 
+                            WHERE `id` = ?;'
+                        );
+                        $stmt->execute([$result['id']]);
+                        $stmt = self::$db->prepare(
+                            'DELETE FROM `register`
+                            WHERE `id_client` = ?;
+                            DELETE FROM `time`
+                            WHERE `id_client` = ?;'
+                        );
+                        $stmt->execute([$result['id'], $result['id']]);
+                        return 'valid_registration';
+                    }
+                    else return 'invalid_time';
                 }
-                else return 'invalid_time';
+                else return 'invalid_mail';
             }
-            else return 'invalid_mail';
+            else return 'already_registered';
         }
         else return 'user_not_found';
     }
@@ -139,7 +139,7 @@ class User extends Database{
          * Fetch password and all IPs related to the user
          */
         $stmt = self::$db->prepare(
-            'SELECT i.`address`, c.`password` FROM `ips` i 
+            'SELECT i.`address`, c.`password`, c.`active` FROM `ips` i 
             INNER JOIN `clients` c ON c.`id` = i.`id_client` 
             WHERE c.`mail` = ? GROUP BY c.`password`, i.`address`'
         );
@@ -152,42 +152,46 @@ class User extends Database{
             $results['ip'] = [];
             foreach($result as $key => $pair){
                 if(empty($results['password'])) $results['password'] = $pair['password'];
+                if(empty($results['active'])) $results['active'] = $pair['active'];
                 if(!empty($pair['address'])) array_push($results['ip'], $pair['address']);
             }
-            /**
-             * Remove devices if there's more than 5 registered
-             */
-            if(count($results['ip']) > 5){
-                for($i = 0; $i < 3; $i++){
-                    $stmt = self::$db->prepare(
-                        'DELETE FROM `ips` 
-                        WHERE `address` = ?'
-                    );
-                    $stmt->execute([$results['ip'][$i]]);
+            if($results['active'] == 1){
+                /**
+                 * Remove devices if there's more than 5 registered
+                 */
+                if(count($results['ip']) > 5){
+                    for($i = 0; $i < 3; $i++){
+                        $stmt = self::$db->prepare(
+                            'DELETE FROM `ips` 
+                            WHERE `address` = ?'
+                        );
+                        $stmt->execute([$results['ip'][$i]]);
+                    }
+                }
+                if(password_verify($this->password, $results['password'])){
+                    if(in_array($this->ip, $results['ip'])){
+                        /**
+                         * Generate user's token and store its hash into the database
+                         */
+                        $session = new Session();
+                        $this->authtoken = $session->giveCookie();
+                        $stmt = self::$db->prepare(
+                            'UPDATE `clients` 
+                            SET `authtoken` = ? 
+                            WHERE `mail` = ?'
+                        );
+                        $stmt->execute([$this->authtoken, $this->mail]);
+                        return 'login_success';
+                    }
+                    else{
+                        $this->sendCryptedMail('connect');
+                        return 'new_device';
+                    }
                 }
             }
-            if(password_verify($this->password, $results['password'])){
-                if(in_array($this->ip, $results['ip'])){
-                    /**
-                     * Generate user's token and store its hash into the database
-                     */
-                    $session = new Session();
-                    $this->authtoken = $session->giveCookie();
-                    $stmt = self::$db->prepare(
-                        'UPDATE `clients` 
-                        SET `authtoken` = ? 
-                        WHERE `mail` = ?'
-                    );
-                    $stmt->execute([$this->authtoken, $this->mail]);
-                    return 'login_success';
-                }
-                else{
-                    $this->sendCryptedMail('connect');
-                    return 'new_device';
-                }
-            }
+            else return 'inactive';
         }
-        return 'invalid_login';
+        else return 'invalid_login';
     }
 
     public function confirmLogin(){
@@ -205,56 +209,53 @@ class User extends Database{
                 WHERE t.`id_client` = ?'
             );
             $stmt->execute([$result['id']]);
-            $keychain = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            /**
-             * Decipher GETs in URL
-             */
-            $algo = 'AES-256-CTR';
-            $time = openssl_decrypt(
-                urldecode($_GET['t']),
-                $algo,
-                base64_decode($keychain['time_key']),
-                OPENSSL_ZERO_PADDING,
-                base64_decode($keychain['time_iv'])
-            );
-            $mail = openssl_decrypt(
-                urldecode($_GET['m']),
-                $algo,
-                base64_decode($keychain['connect_key']),
-                OPENSSL_ZERO_PADDING,
-                base64_decode($keychain['connect_iv'])
-            );
-
-            /**
-             * If deciphered mail matches mail origin
-             */
-            var_dump($mail);
-            var_dump($this->mail);
-            if($mail === $this->mail){
+            if(!empty($keychain = $stmt->fetch(PDO::FETCH_ASSOC))){
+                
                 /**
-                 * If it's been less than 1 hour, activate account
+                 * Decipher GETs in URL
                  */
-                if(time() - intval($time) < 3600){
-                    echo "yes";
-                    // $stmt = self::$db->prepare(
-                    //     'UPDATE `clients` 
-                    //     SET `active` = 1 
-                    //     WHERE `id` = ?;'
-                    // );
-                    // $stmt->execute([$result['id']]);
-                    // $stmt = self::$db->prepare(
-                    //     'DELETE FROM `register`
-                    //     WHERE `id_client` = ?;
-                    //     DELETE FROM `time`
-                    //     WHERE `id_client` = ?;'
-                    // );
-                    $stmt->execute([$result['id']]);
-                    return 'valid_registration';
+                $algo = 'AES-256-CTR';
+                $mail = openssl_decrypt(
+                    rawurldecode($_GET['m']),
+                    $algo,
+                    base64_decode($keychain['connect_key']),
+                    OPENSSL_ZERO_PADDING,
+                    base64_decode($keychain['connect_iv'])
+                );
+                $time = openssl_decrypt(
+                    rawurldecode($_GET['t']),
+                    $algo,
+                    base64_decode($keychain['time_key']),
+                    OPENSSL_ZERO_PADDING,
+                    base64_decode($keychain['time_iv'])
+                );
+                /**
+                 * If deciphered mail matches mail origin
+                 */
+                if($mail === $this->mail){
+                    /**
+                     * If it's been less than 1 hour, activate account
+                     */
+                    if(time() - intval($time) < 3600){
+                        $stmt = self::$db->prepare(
+                            "INSERT INTO `ips` (`id_client`, `address`)
+                            VALUES (?, ?);"
+                        );
+                        $stmt->execute([$result['id'], $this->ip]);
+                        $stmt = self::$db->prepare(
+                            'DELETE FROM `connect`
+                            WHERE `id_client` = ?;
+                            DELETE FROM `time`
+                            WHERE `id_client` = ?;'
+                        );
+                        $stmt->execute([$result['id'], $result['id']]);
+                        return 'valid_registration';
+                    }
+                    else return 'invalid_time';
                 }
-                else return 'invalid_time';
+                else return 'invalid_mail';
             }
-            else return 'invalid_mail';
+            else return 'already_connected';
         }
         else return 'user_not_found';
     }
@@ -275,9 +276,9 @@ class User extends Database{
         /**
          * Generate iv & key for user's mail encryption
          */
-        $iv1   = random_bytes(openssl_cipher_iv_length($algo));
-        $key1  = openssl_random_pseudo_bytes(64);
-        $crypted_mail = urlencode(openssl_encrypt(
+        $iv1 = openssl_random_pseudo_bytes(openssl_cipher_iv_length($algo));
+        $key1 = openssl_random_pseudo_bytes(64);
+        $crypted_mail = rawurlencode(openssl_encrypt(
             $this->mail,
             $algo,
             $key1,
@@ -287,15 +288,19 @@ class User extends Database{
         /**
          * Generate iv & key for time encryption
          */
-        $iv2   = random_bytes(openssl_cipher_iv_length($algo));
-        $key2  = openssl_random_pseudo_bytes(64);
-        $crypted_time = urlencode(openssl_encrypt(
+        $iv2 = openssl_random_pseudo_bytes(openssl_cipher_iv_length($algo));
+        $key2 = openssl_random_pseudo_bytes(64);
+        $crypted_time = rawurlencode(openssl_encrypt(
             time(),
             $algo,
             $key2,
             OPENSSL_ZERO_PADDING,
             $iv2
         ));
+        $iv1 = base64_encode($iv1);
+        $iv2 = base64_encode($iv2);
+        $key1 = base64_encode($key1);
+        $key2 = base64_encode($key2);
         /**
          * Insert keys and ivs into database
          */
@@ -305,22 +310,27 @@ class User extends Database{
                 INSERT INTO `clients` (`nom`, `prenom`, `mail`, `telephone`, `password`) VALUES (?, ?, ?, ?, ?); 
                 SELECT @user_id := LAST_INSERT_ID();
                 INSERT INTO `ips` (`id_client`, `address`) VALUES (@user_id, ?);
+                DELETE FROM $table WHERE `id_client` = @user_id;
+                DELETE FROM `time` WHERE `id_client` = @user_id;
                 INSERT INTO $table (`id_client`, `openssl_iv`, `openssl_key`) VALUES (@user_id, ?, ?); 
-                INSERT INTO `time` (`id_client`, `openssl_iv`, `openssl_key`) VALUES (@user_id, ?, ?); COMMIT;");
+                INSERT INTO `time` (`id_client`, `openssl_iv`, `openssl_key`) VALUES (@user_id, ?, ?); 
+                COMMIT;");
             $stmt->execute(
                 [$this->lastname, $this->firstname, $this->mail, $this->phone, password_hash($this->password, PASSWORD_DEFAULT), 
-                $this->ip, base64_encode($iv1), base64_encode($key1), base64_encode($iv2), base64_encode($key2)]);
+                $this->ip, $iv1, $key1, $iv2, $key2]);
             $link = URL . 'inscription?m=' . $crypted_mail . '&a=1&t=' . $crypted_time . '&o=' . $this->mail;
         }
         else if($table === 'connect'){
             $stmt = self::$db->prepare(
                 "BEGIN; 
                 SELECT @user_id := (SELECT `id` FROM `clients` WHERE `mail` = ?);
+                DELETE FROM $table WHERE `id_client` = @user_id;
+                DELETE FROM `time` WHERE `id_client` = @user_id;
                 INSERT INTO $table (`id_client`, `openssl_iv`, `openssl_key`) VALUES (@user_id, ?, ?); 
-                INSERT INTO `time` (`id_client`, `openssl_iv`, `openssl_key`) VALUES (@user_id, ?, ?); COMMIT;");
-            $stmt->execute(
-                [$this->mail, base64_encode($iv1), base64_encode($key1), base64_encode($iv2), base64_encode($key2)]);
-            $link = URL . 'connection?m=' . $crypted_mail . '&a=1&t=' . $crypted_time . '&o=' . $this->mail;
+                INSERT INTO `time` (`id_client`, `openssl_iv`, `openssl_key`) VALUES (@user_id, ?, ?); 
+                COMMIT;");
+            $stmt->execute([$this->mail, $iv1, $key1, $iv2, $key2]);
+            $link = URL . 'connexion?m=' . $crypted_mail . '&i=' . base64_encode($this->ip) . '&a=1&t=' . $crypted_time . '&o=' . $this->mail;
         }
         /**
          * Generate mail's content

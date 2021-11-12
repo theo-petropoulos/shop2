@@ -1,0 +1,43 @@
+#error {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#error #error_container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-family: "DotGothic16";
+  text-align: center;
+  padding: 2% 4%;
+  border: 1px solid #2d2d2d;
+  width: 50%;
+  -ms-flex-item-align: center;
+      align-self: center;
+  margin: 2% 0%;
+}
+
+#error #error_container p a {
+  color: #f05f00;
+  text-decoration: none;
+}
+
+#error #error_container p a:hover {
+  color: #f0b000;
+  -webkit-transition: color 0.3s;
+  transition: color 0.3s;
+}
+/*# sourceMappingURL=error.css.map */

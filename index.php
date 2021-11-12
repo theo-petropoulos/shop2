@@ -1,18 +1,21 @@
 <?php
-require '_config.php';
-require 'vendor/autoload.php';
+require_once '_config.php';
+require_once 'vendor/autoload.php';
 $f3 = \Base::instance();
 $f3->set('JAR.domain', $_SERVER['HTTP_HOST']);
-require CONTROLLER . 'data/Session.php';
 
+require_once CONTROLLER . 'data/SessionCTRL.php';
 
 /** 
  * Home page
  */
 $f3->route('GET /',
-    function(){
-        require 'controller/Index.php';
-        $page = new Index();
+    function($f3){
+        $title = 'ACCUEIL';
+        require_once REQUIRES . 'head.php';
+        require_once REQUIRES . 'header.php';
+        require 'controller/IndexCTRL.php';
+        $page = new IndexCTRL();
     }
 );
 
@@ -21,7 +24,9 @@ $f3->route('GET /',
  */
 $f3->route('GET /admin',
     function($f3, $params){
-
+        $title = 'ADMINISTRATION';
+        require_once REQUIRES . 'head.php';
+        require_once REQUIRES . 'header.php';
     }
 );
 
@@ -29,29 +34,45 @@ $f3->route('GET /admin',
  * Users
  */
 $f3->route('GET /profil',
-    function($f3){
+    function($f3){        
         $session = new Session();
         if($session->authenticate()){
-            echo "connected";
+            $title = 'PROFIL';
+            require_once REQUIRES . 'head.php';
+            require_once REQUIRES . 'header.php';
+            require MODEL . 'user/Profile.php';
+            $profile = new Profile(['authtoken' => $_COOKIE['authtoken']]);
         }
         else{
-            $f3->set('action', 'login_form');
-            require CONTROLLER . 'user/Connection.php';
-            $page = new Connection();
+            $f3->reroute('/connexion');
         }
+        // else{
+        //     $title = 'CONNEXION';
+        //     require_once REQUIRES . 'head.php';
+        //     require_once REQUIRES . 'header.php';
+        //     $f3->set('action', 'login_form');
+        //     require CONTROLLER . 'user/ConnectionCTRL.php';
+        //     $page = new ConnectionCTRL();
+        // }
     }
 );
 
 $f3->route('POST /profil',
     function($f3){
+        $title = 'CONNEXION';
+        require_once REQUIRES . 'head.php';
+        require_once REQUIRES . 'header.php';
         $f3->set('action', 'login_submit');
-        require CONTROLLER . 'user/Connection.php';
-        $page = new Connection();
+        require CONTROLLER . 'user/ConnexionCTRL.php';
+        $page = new ConnexionCTRL();
     }
 );
 
 $f3->route('GET /inscription*',
     function($f3){
+        $title = 'INSCRIPTION';
+        require_once REQUIRES . 'head.php';
+        require_once REQUIRES . 'header.php';
         $session = new Session();
         if($session->authenticate()){
             echo "already connected";
@@ -60,25 +81,34 @@ $f3->route('GET /inscription*',
             if(!empty($_GET['o']) && !empty($_GET['m']) && !empty($_GET['a']) && !empty($_GET['t']))
                 $f3->set('action', 'register_confirm');
             else $f3->set('action', 'register_form');
-            require CONTROLLER . 'user/Registration.php';
-            $page = new Registration();
+            require CONTROLLER . 'user/RegistrationCTRL.php';
+            $page = new RegistrationCTRL();
         }
     }
 );
 
 $f3->route('POST /inscription',
     function($f3){
+        $title = 'INSCRIPTION';
+        require_once REQUIRES . 'head.php';
+        require_once REQUIRES . 'header.php';
         $f3->set('action', 'register_submit');
-        require CONTROLLER . 'user/Registration.php';
-        $page = new Registration();
+        require CONTROLLER . 'user/RegistrationCTRL.php';
+        $page = new RegistrationCTRL();
     }
 );
 
-$f3->route('GET /connection',
+$f3->route('GET /connexion*',
     function($f3){
-        $f3->set('action', 'login_confirm');
-        require CONTROLLER . 'user/Connection.php';
-        $page = new Connection();
+        $title = 'CONNEXION';
+        require_once REQUIRES . 'head.php';
+        require_once REQUIRES . 'header.php';
+        if(empty($f3['GET']))
+            $f3->set('action', 'login_form');
+        else
+            $f3->set('action', 'login_confirm');
+        require CONTROLLER . 'user/ConnexionCTRL.php';
+        $page = new ConnexionCTRL();
     }
 );
 
@@ -105,3 +135,5 @@ $f3->route('GET /marques/@marque/@product',
 );
 
 $f3->run();
+
+require_once REQUIRES . 'footer.php';

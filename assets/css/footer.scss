@@ -1,0 +1,48 @@
+$font:'DotGothic16';
+$orange:rgb(240, 95, 0);
+$orange_light:rgb(240, 176, 0);
+$grey:rgb(45,45,45);
+$grey_light:rgb(109, 109, 109);
+
+footer{
+    display:flex;
+    flex-direction: row;
+    justify-content:space-between;
+    font-family: $font;
+    border-top:1px solid $grey;
+    background:white;
+    div{
+        padding:1% 2%;
+        width:30%;
+        flex-grow:1;
+    }
+    #footer_left{
+        text-align: left;
+    }
+    #footer_middle{
+        display:flex;
+        flex-direction: column;
+        text-align: center;
+        a{
+            text-decoration:none;
+            color:$orange;
+            &:hover{
+                color:$orange_light;
+                transition:color 0.3s;
+            }
+        }
+    }
+    #footer_right{
+        display:flex;
+        justify-content: flex-end;
+        text-align: right;
+        a{
+            text-decoration:none;
+            color:$orange;
+            &:hover{
+                color:$orange_light;
+                transition:color 0.3s;
+            }
+        }
+    }
+}

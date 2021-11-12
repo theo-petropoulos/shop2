@@ -1,0 +1,127 @@
+#inscription {
+  font-family: "DotGothic16";
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  background: white;
+}
+
+#inscription #inscription_header {
+  text-align: center;
+}
+
+#inscription #inscription_header h3 {
+  font-size: calc(14px + 1vw);
+}
+
+#inscription #inscription_header h4 {
+  font-size: calc(12px + 0.5vw);
+}
+
+#inscription #inscription_header h4 a {
+  text-decoration: none;
+  color: #f05f00;
+}
+
+#inscription #inscription_header h4 a:hover {
+  color: #f0b000;
+  -webkit-transition: color 0.3s;
+  transition: color 0.3s;
+}
+
+#inscription form {
+  border: 1px solid #2d2d2d;
+  padding: 2%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  position: relative;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 50%;
+  margin: 2%;
+}
+
+#inscription form label, #inscription form input {
+  width: 70%;
+  text-align: center;
+  font-family: "DotGothic16";
+}
+
+#inscription form label[type=submit], #inscription form input[type=submit] {
+  margin: 2%;
+  background: #2d2d2d;
+  color: white;
+  font-family: "DotGothic16";
+  outline: 0;
+  border: 1px solid black;
+  border-radius: none;
+  padding: 1% 0;
+  font-size: calc(10px + 0.5vw);
+  line-height: calc(10px + 0.5vw);
+}
+
+#inscription form label[type=submit]:hover, #inscription form input[type=submit]:hover {
+  background: #6d6d6d;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  cursor: pointer;
+  font-size: calc(13px + 0.5vw);
+}
+
+#inscription form label {
+  margin-bottom: 1%;
+}
+
+#inscription_pending {
+  font-family: "DotGothic16";
+  text-align: center;
+  -ms-flex-item-align: center;
+      align-self: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+#inscription_pending p a {
+  color: #f05f00;
+}
+
+#inscription_pending p a:hover {
+  color: #f0b000;
+  -webkit-transition: color 0.3s;
+  transition: color 0.3s;
+}
+
+@media screen and (max-width: 499px) {
+  #inscription form {
+    width: 90%;
+  }
+}
+/*# sourceMappingURL=inscription.css.map */

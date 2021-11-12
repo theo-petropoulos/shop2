@@ -1,0 +1,104 @@
+#header_nav {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  background: white;
+  border-bottom: 1px solid #2d2d2d;
+  min-height: 15vh;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+}
+
+#header_nav #header_right {
+  position: relative;
+  min-width: -webkit-max-content;
+  min-width: -moz-max-content;
+  min-width: max-content;
+  width: 70%;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+#header_nav #header_right ul {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+}
+
+#header_nav #header_right ul li {
+  list-style-type: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  min-width: -webkit-max-content;
+  min-width: -moz-max-content;
+  min-width: max-content;
+  position: relative;
+  margin: 0% 2%;
+}
+
+#header_nav #header_right ul li a {
+  font-family: "DotGothic16";
+  text-decoration: none;
+  color: black;
+}
+
+#header_nav #header_right ul li a:hover {
+  color: #f05f00;
+  -webkit-transition: color 0.3s;
+  transition: color 0.3s;
+}
+
+#header_nav #header_left {
+  position: relative;
+  min-width: -webkit-max-content;
+  min-width: -moz-max-content;
+  min-width: max-content;
+  width: 30%;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+#header_nav #header_left a {
+  font-family: "DotGothic16";
+  text-decoration: none;
+  padding: 1% 2%;
+  color: black;
+}
+
+#header_nav #header_left a:hover {
+  color: #f05f00;
+  -webkit-transition: color 0.3s;
+  transition: color 0.3s;
+}
+/*# sourceMappingURL=header.css.map */

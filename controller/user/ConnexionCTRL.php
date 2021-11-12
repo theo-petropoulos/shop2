@@ -1,6 +1,6 @@
 <?php
 
-class Connection extends Database{
+class ConnexionCTRL extends Database{
     
     public function __construct(){
         $f3 = Base::instance();
@@ -9,7 +9,7 @@ class Connection extends Database{
              * If the user wants to login
              */
             if($f3->get('action') === 'login_form'){
-                require VIEW . 'user/login.php';
+                require_once VIEW . 'user/login.php';
             }
             /**
              * If the user sent a login form
@@ -19,11 +19,16 @@ class Connection extends Database{
                     $user = new User($_POST);
                     switch($user->login()){
                         case 'login_success':
-                            echo "succes";
+                            $f3->reroute('profil');
                             break;
                         case 'new_device':
                             $error = ['origin' => 'login', 'message' => 'Vous venez de vous connecter depuis un nouvel appareil. Pour votre sécurité, 
                             un mail vient de vous être envoyé afin de valider cette connexion.'];
+                            break;
+                        case 'inactive':
+                            $error = ['origin' => 'login', 'message' => 'Votre profil n\'est pas encore actif. Un mail d\'activation vous a été 
+                            envoyé au moment de l\'inscription. Si celui-ci a expiré, merci de contacter le support à 
+                            <a href="mailto:support@minimal-shop.com">support@minimal-shop.com</a>'];
                             break;
                         case 'invalid_login':
                         default:
@@ -39,8 +44,12 @@ class Connection extends Database{
              */
             else if($f3->get('action') === 'login_confirm'){
                 if(filter_var($_GET['o'], FILTER_VALIDATE_EMAIL) && intval($_GET['a']) === 1){
-                    $user = new User(['mail' => $_GET['o'], 'crypted_mail' => $_GET['m'], 'crypted_time' => $_GET['t']]);
+                    $user = new User(['mail' => $_GET['o'], 'crypted_mail' => $_GET['m'], 'crypted_time' => $_GET['t'], 'ip' => base64_decode($_GET['i'])]);
                     switch($user->confirmLogin()){
+                        case 'already_connected':
+                            $error = ['origin' => 'register', 'message' => 'Ce lien d\'activation a déjà utilisé. Vous pouvez maintenant vous
+                            <a href="profil">connecter</a>.'];
+                            break;
                         case 'user_not_found':
                         case 'invalid_mail':
                             $error = ['origin' => 'register', 'message' => 'Une erreur inattendue est survenue durant votre inscription. Veuillez 
@@ -48,14 +57,14 @@ class Connection extends Database{
                             break;
                         case 'invalid_time':
                             $error = ['origin' => 'register', 'message' => 'Le lien d\'activation a expiré. Veuillez contacter l\'assistance technique à 
-                            <a href="mailto:assistance@shop.com">assistance@shop.com</a>.<br>Revenir à l\'<a href="/">Accueil</a>.'];
+                            <a href="mailto:support@minimal-shop.com">support@minimal-shop.com</a>.<br>Revenir à l\'<a href="/">Accueil</a>.'];
                             break;
                         case 'valid_registration':
                             $confirm = 'success';
                             break;
                         default:
                             $error = ['origin' => 'register', 'message' => 'Une erreur inattendue est survenue. Si le problème persiste, 
-                            veuillez contacter l\'assistance technique à <a href="mailto:assistance@shop.com">assistance@shop.com</a>.
+                            veuillez contacter l\'assistance technique à <a href="mailto:support@minimal-shop.com">support@minimal-shop.com</a>.
                             <br>Revenir à l\'<a href="/">Accueil</a>.'];
                             break;
                     }
@@ -63,12 +72,12 @@ class Connection extends Database{
                 else
                     $error = ['origin' => 'register', 'message' => 'Une erreur est survenue pendant l\'activation de votre compte. Veuillez réessayer 
                     en suivant le lien contenu dans le mail qui vous a été envoyé. Si le problème persiste, veuillez contacter l\'assistance technique à 
-                    <a href="mailto:assistance@shop.com">assistance@shop.com</a>.'];
+                    <a href="mailto:support@minimal-shop.com">support@minimal-shop.com</a>.'];
             }
         }
         else   
             $error = ['origin' => 'register', 'message' => 'Une erreur inattendue est survenue. Si le problème persiste, 
-            veuillez contacter l\'assistance technique à <a href="mailto:assistance@shop.com">assistance@shop.com</a>.
+            veuillez contacter l\'assistance technique à <a href="mailto:support@minimal-shop.com">support@minimal-shop.com</a>.
             <br>Revenir à l\'<a href="/">Accueil</a>.'];
 
         if(!empty($error)) require VIEW . 'error/generator.php';

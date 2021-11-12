@@ -1,0 +1,25 @@
+@import url("header.css");
+@import url("footer.css");
+@import url("error.css");
+*, html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-width: 100vw;
+  min-height: 100vh;
+  overflow-x: hidden;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+main {
+  min-height: 85vh;
+}
+/*# sourceMappingURL=globals.css.map */

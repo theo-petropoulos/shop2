@@ -1,6 +1,6 @@
 <?php
 
-class Registration extends Database{
+class RegistrationCTRL extends Database{
     public function __construct(){
         $f3 = Base::instance();
         if(!empty($f3->get('action'))){
@@ -40,7 +40,7 @@ class Registration extends Database{
                             break;
                         case 'user_exists':
                             $error = ['origin' => 'register', 'message' => 'Cette adresse mail et/ou ce numéro de téléphone sont déjà utilisés. Veuillez 
-                            <a href="inscription">réessayer</a>.<br><a href="reset-password">Réinitiliser le mot de passe ?</a>'];
+                            <a href="inscription">réessayer</a>.<br><a href="reset-password">Réinitialiser le mot de passe ?</a>'];
                             break;
                         case 'register_success':
                             $confirm = 'pending';
@@ -59,14 +59,18 @@ class Registration extends Database{
                 if(filter_var($_GET['o'], FILTER_VALIDATE_EMAIL) && intval($_GET['a']) === 1){
                     $user = new User(['mail' => $_GET['o'], 'crypted_mail' => $_GET['m'], 'crypted_time' => $_GET['t']]);
                     switch($user->confirmRegister()){
+                        case 'already_registered':
+                            $error = ['origin' => 'register', 'message' => 'Ce lien d\'activation a déjà été utilisé. Vous pouvez maintenant vous 
+                            <a href="profil">connecter.</a>'];
+                            break;
                         case 'user_not_found':
                         case 'invalid_mail':
                             $error = ['origin' => 'register', 'message' => 'Une erreur inattendue est survenue durant votre inscription. Veuillez 
-                            réessayer avec le lien contenu dans le mail qui vous a été envoyé.<br>Revenir à l\'<a href="/">Accueil</a>.'];
+                            réessayer avec le lien contenu dans le mail qui vous a été envoyé.<br>Revenir à l\'<a href="/shop/">Accueil</a>.'];
                             break;
                         case 'invalid_time':
                             $error = ['origin' => 'register', 'message' => 'Le lien d\'activation a expiré. Veuillez contacter l\'assistance technique à 
-                            <a href="mailto:assistance@shop.com">assistance@shop.com</a>.<br>Revenir à l\'<a href="/">Accueil</a>.'];
+                            <a href="mailto:assistance@shop.com">assistance@shop.com</a>.<br>Revenir à l\'<a href="/shop/">Accueil</a>.'];
                             break;
                         case 'valid_registration':
                             $confirm = 'success';
@@ -74,7 +78,7 @@ class Registration extends Database{
                         default:
                             $error = ['origin' => 'register', 'message' => 'Une erreur inattendue est survenue. Si le problème persiste, 
                             veuillez contacter l\'assistance technique à <a href="mailto:assistance@shop.com">assistance@shop.com</a>.
-                            <br>Revenir à l\'<a href="/">Accueil</a>.'];
+                            <br>Revenir à l\'<a href="/shop/">Accueil</a>.'];
                             break;
                     }
                 }

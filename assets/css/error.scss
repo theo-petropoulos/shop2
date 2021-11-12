@@ -1,0 +1,33 @@
+$font:'DotGothic16';
+$orange:rgb(240, 95, 0);
+$orange_light:rgb(240, 176, 0);
+$grey:rgb(45,45,45);
+$grey_light:rgb(109, 109, 109);
+
+#error{
+    display:flex;
+    justify-content: center;
+    align-items:center;
+    #error_container{
+        display:flex;
+        justify-content: center;
+        align-items:center;
+        font-family: $font;
+        text-align: center;
+        padding:2% 4%;
+        border:1px solid $grey;
+        width:50%;
+        align-self: center;
+        margin:2% 0%;
+        p{
+            a{
+                color:$orange;
+                text-decoration: none;
+                &:hover{
+                    color:$orange_light;
+                    transition:color 0.3s;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,27 @@
+@import url('header.css');
+@import url('footer.css');
+@import url('error.css');
+
+$font:'DotGothic16';
+$orange:rgb(240, 95, 0);
+$orange_light:rgb(240, 176, 0);
+$grey:rgb(45,45,45);
+$grey_light:rgb(109, 109, 109);
+
+*,html,body{
+    margin:0;
+    padding:0;
+}
+
+body{
+    min-width:100vw;
+    min-height:100vh;
+    overflow-x: hidden;
+    display:flex;
+    flex-direction:column;
+    background:white;
+}
+
+main{
+    min-height:85vh;
+}

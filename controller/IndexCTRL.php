@@ -1,6 +1,6 @@
 <?php
 
-class Index extends Session{
+class IndexCTRL extends Session{
 
     public function __construct(){
         if(isset($_SESSION)){

@@ -1,0 +1,71 @@
+footer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  font-family: "DotGothic16";
+  border-top: 1px solid #2d2d2d;
+  background: white;
+}
+
+footer div {
+  padding: 1% 2%;
+  width: 30%;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+
+footer #footer_left {
+  text-align: left;
+}
+
+footer #footer_middle {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  text-align: center;
+}
+
+footer #footer_middle a {
+  text-decoration: none;
+  color: #f05f00;
+}
+
+footer #footer_middle a:hover {
+  color: #f0b000;
+  -webkit-transition: color 0.3s;
+  transition: color 0.3s;
+}
+
+footer #footer_right {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  text-align: right;
+}
+
+footer #footer_right a {
+  text-decoration: none;
+  color: #f05f00;
+}
+
+footer #footer_right a:hover {
+  color: #f0b000;
+  -webkit-transition: color 0.3s;
+  transition: color 0.3s;
+}
+/*# sourceMappingURL=footer.css.map */

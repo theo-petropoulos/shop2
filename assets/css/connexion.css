@@ -1,0 +1,100 @@
+#connexion {
+  font-family: "DotGothic16";
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  background: white;
+}
+
+#connexion #connexion_header {
+  text-align: center;
+}
+
+#connexion #connexion_header h3 {
+  font-size: calc(14px + 1vw);
+}
+
+#connexion #connexion_header h4 {
+  font-size: calc(12px + 0.5vw);
+}
+
+#connexion #connexion_header h4 a {
+  text-decoration: none;
+  color: #f05f00;
+}
+
+#connexion #connexion_header h4 a:hover {
+  color: #f0b000;
+  -webkit-transition: color 0.3s;
+  transition: color 0.3s;
+}
+
+#connexion form {
+  border: 1px solid #2d2d2d;
+  padding: 2%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  position: relative;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 50%;
+  margin: 2%;
+}
+
+#connexion form label, #connexion form input {
+  width: 70%;
+  text-align: center;
+  font-family: "DotGothic16";
+}
+
+#connexion form label[type=submit], #connexion form input[type=submit] {
+  margin: 2%;
+  background: #2d2d2d;
+  color: white;
+  font-family: "DotGothic16";
+  outline: 0;
+  border: 1px solid black;
+  border-radius: none;
+  padding: 1% 0;
+  font-size: calc(10px + 0.5vw);
+  line-height: calc(10px + 0.5vw);
+}
+
+#connexion form label[type=submit]:hover, #connexion form input[type=submit]:hover {
+  background: #6d6d6d;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  cursor: pointer;
+  font-size: calc(13px + 0.5vw);
+}
+
+#connexion form label {
+  margin-bottom: 1%;
+}
+
+@media screen and (max-width: 499px) {
+  #connexion form {
+    width: 90%;
+  }
+}
+/*# sourceMappingURL=connexion.css.map */

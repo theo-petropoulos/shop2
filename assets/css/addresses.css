@@ -1,0 +1,138 @@
+#addresses {
+  font-family: "DotGothic16";
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  background: white;
+}
+
+#addresses h2 {
+  font-size: calc(14px + 1vw);
+}
+
+#addresses a {
+  text-decoration: none;
+  padding: 1% 2%;
+  border: 1px solid black;
+  background: white;
+  color: black;
+  margin: calc(max(2%, 20px));
+}
+
+#addresses a:hover {
+  background: #c3c3c3;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+#addresses form {
+  border: 1px solid #2d2d2d;
+  padding: 2%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  position: relative;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 50%;
+  margin: 2%;
+}
+
+#addresses form #address_num_holder {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  width: 70%;
+  position: relative;
+}
+
+#addresses form #address_num_holder label {
+  width: 100%;
+}
+
+#addresses form #address_num_holder span {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  position: relative;
+  width: 100%;
+}
+
+#addresses form #address_num_holder span input {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+
+#addresses form #address_num_holder span input:first-of-type {
+  width: 10%;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+}
+
+#addresses form label, #addresses form input {
+  width: 70%;
+  text-align: center;
+  font-family: "DotGothic16";
+}
+
+#addresses form label[type=submit], #addresses form input[type=submit] {
+  margin: 2%;
+  background: #2d2d2d;
+  color: white;
+  font-family: "DotGothic16";
+  outline: 0;
+  border: 1px solid black;
+  border-radius: none;
+  padding: 1% 0;
+  font-size: calc(10px + 0.5vw);
+  line-height: calc(10px + 0.5vw);
+}
+
+#addresses form label[type=submit]:hover, #addresses form input[type=submit]:hover {
+  background: #6d6d6d;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  cursor: pointer;
+  font-size: calc(13px + 0.5vw);
+}
+
+#addresses form label {
+  margin-bottom: 1%;
+}
+
+@media screen and (max-width: 499px) {
+  #addresses form {
+    width: 95%;
+  }
+}
+/*# sourceMappingURL=addresses.css.map */

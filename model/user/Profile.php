@@ -20,8 +20,31 @@ class Profile extends Database{
         return $this->$item ?? null;
     }
 
-    public function disconnect(){
-        
+    public function fetchAddresses(){
+        $stmt = self::$db->prepare(
+            'SELECT a.nom, a.prenom, a.numero, a.rue, a.complement, a.code_postal, a.ville 
+            FROM adresses a 
+            WHERE a.id_client = ( SELECT c.id FROM clients c WHERE c.authtoken = ? );'
+        );
+        $stmt->execute([$this->authtoken]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function addNewAddress(array $array){
+        foreach($array as $item => $value)
+            $this->$item = htmlspecialchars($value, ENT_QUOTES);
+        if(!empty($this->nom) && !empty($this->prenom) && !empty($this->rue) && !empty($this->ville) && !empty($this->code_postal)){
+            $stmt = self::$db->prepare(
+                'INSERT INTO `adresses` (id_client, nom, prenom, numero, rue, code_postal, ville) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)'
+            );
+            $stmt->execute([$this->id_client, $this->nom, $this->prenom, $this->numero, $this->rue, $this->code_postal, $this->ville]);
+            if($stmt->rowCount()){
+                return 1;
+            }
+            else return 0;
+        }
+        else return 0;
     }
 
     private static function fetchInfos(string $authtoken = NULL){

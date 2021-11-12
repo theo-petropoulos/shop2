@@ -59,21 +59,32 @@ $f3->route('GET /profil',
 
 $f3->route('POST /profil',
     function($f3){
-        if(!empty($_POST['modify_password']) && $_POST['modify_password'] == 1){
+        $keys = array_keys($_POST);
+        $i = 0;
+        foreach($keys as $k => $key){
+            if(str_contains($key, 'modify_'))
+                $i++;
+        }
+        if($i){
             $title = 'PROFIL';
             require_once REQUIRES . 'head.php';
             require_once REQUIRES . 'header.php';
-            $f3->set('action', 'modify_password');
+            if(!empty($_POST['modify_password']) && $_POST['modify_password'] == 1)
+                $f3->set('action', 'modify_password');
+            elseif(!empty($_POST['modify_address']) && $_POST['modify_address'] == 1)
+                $f3->set('action', 'modify_address');
             require CONTROLLER . 'user/ProfileCTRL.php';
             $page = new ProfileCTRL();
         }
-        else if(!empty($_POST['login']) && $_POST['login'] == 1){
-            $title = 'CONNEXION';
-            require_once REQUIRES . 'head.php';
-            require_once REQUIRES . 'header.php';
-            $f3->set('action', 'login_submit');
-            require CONTROLLER . 'user/ConnexionCTRL.php';
-            $page = new ConnexionCTRL();
+        else{
+            if(!empty($_POST['login']) && $_POST['login'] == 1){
+                $title = 'CONNEXION';
+                require_once REQUIRES . 'head.php';
+                require_once REQUIRES . 'header.php';
+                $f3->set('action', 'login_submit');
+                require CONTROLLER . 'user/ConnexionCTRL.php';
+                $page = new ConnexionCTRL();
+            }
         }
     }
 );

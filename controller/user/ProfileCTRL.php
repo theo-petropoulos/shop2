@@ -11,6 +11,10 @@
                 }
                 elseif($f3->get('action') === 'modify'){
                     switch($_GET['modify']){
+                        case 'addresses':
+                            $addresses = $profile->fetchAddresses();
+                            require VIEW . 'user/profile/addresses.php';
+                            break;
                         case 'password':
                             require VIEW . 'user/profile/password.php';
                             break;
@@ -31,7 +35,7 @@
                         case 'modify_failure':
                             $error = ['origin' => 'profile_password', 'message' => 'Une erreur est survenue pendant la mise à jour de votre mot de passe. 
                             Veuillez essayer de vous déconnecter / reconnecter, puis renouveller la tentative. Si le problème persiste, veuillez contacter 
-                            l\'assistance technique à <a href="mailto:support@minimal-shop.com">support@minimal-shop.com</a>']; 
+                            l\'assistance technique à <a href="mailto:support@minimal-shop.com">support@minimal-shop.com</a>.']; 
                             break;
                         case 'invalid_strenght':
                             $error = ['origin' => 'profile_password', 'message' => 'Le mot de passe n\'est pas assez fort. Pour rappel, il doit faire 
@@ -51,6 +55,19 @@
                             $error = ['origin' => 'profile_password', 'message' => 'Une erreur inattendue est survenue pendant la modification de votre 
                             mot de passe. Veuillez <a href="profil?modify=password">réessayer</a>.'];
                             break;
+                    }
+                }
+                elseif($f3->get('action') === 'modify_address'){
+                    unset($_POST['modify_address']);
+                    if($profile->addNewAddress($_POST)){
+                        $success = 1;
+                        $addresses = $profile->fetchAddresses();
+                        require VIEW . 'user/profile/addresses.php';
+                    }
+                    else{
+                        $error = ['origin' => 'profile_address', 'message' => 'Une erreur est survenue pendant l\'ajout de votre adresse. 
+                        Veuillez <a href="profil?modify=password">réessayer</a>. Si le problème persiste veuillez contacter 
+                        l\'assistance technique à <a href="mailto:support@minimal-shop.com">support@minimal-shop.com</a>.'];
                     }
                 }
             }

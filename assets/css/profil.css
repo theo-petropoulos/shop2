@@ -1,0 +1,172 @@
+#profile {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  font-family: "DotGothic16";
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  min-width: -webkit-max-content;
+  min-width: -moz-max-content;
+  min-width: max-content;
+}
+
+#profile #landing {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  padding: 2%;
+  border: 1px solid black;
+  text-align: center;
+  min-width: -webkit-max-content;
+  min-width: -moz-max-content;
+  min-width: max-content;
+}
+
+#profile #landing #landing_titles {
+  border-bottom: 1px solid black;
+  padding: 1%;
+}
+
+#profile #landing #landing_titles a {
+  text-decoration: none;
+  color: #f05f00;
+}
+
+#profile #landing #landing_titles a:hover {
+  color: #f0b000;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+#profile #landing #landing_content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  padding: 1%;
+  min-width: -webkit-max-content;
+  min-width: -moz-max-content;
+  min-width: max-content;
+}
+
+#profile #landing #landing_content a {
+  text-decoration: none;
+  color: #f05f00;
+}
+
+#profile #landing #landing_content a:hover {
+  color: #f0b000;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+#profile #password {
+  font-family: "DotGothic16";
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  background: white;
+}
+
+#profile #password h2 {
+  font-size: calc(14px + 1vw);
+}
+
+#profile #password a {
+  text-decoration: none;
+  padding: 1% 2%;
+  border: 1px solid black;
+  background: white;
+  color: black;
+}
+
+#profile #password a:hover {
+  background: #c3c3c3;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+#profile #password form {
+  border: 1px solid #2d2d2d;
+  padding: 2%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  position: relative;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 50%;
+  margin: 2%;
+}
+
+#profile #password form label, #profile #password form input {
+  width: 70%;
+  text-align: center;
+  font-family: "DotGothic16";
+}
+
+#profile #password form label[type=submit], #profile #password form input[type=submit] {
+  margin: 2%;
+  background: #2d2d2d;
+  color: white;
+  font-family: "DotGothic16";
+  outline: 0;
+  border: 1px solid black;
+  border-radius: none;
+  padding: 1% 0;
+  font-size: calc(10px + 0.5vw);
+  line-height: calc(10px + 0.5vw);
+}
+
+#profile #password form label[type=submit]:hover, #profile #password form input[type=submit]:hover {
+  background: #6d6d6d;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  cursor: pointer;
+  font-size: calc(13px + 0.5vw);
+}
+
+#profile #password form label {
+  margin-bottom: 1%;
+}
+
+@media screen and (max-width: 499px) {
+  #profile #landing {
+    width: 90%;
+  }
+}
+/*# sourceMappingURL=profil.css.map */

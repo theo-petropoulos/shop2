@@ -91,7 +91,7 @@ class RegistrationCTRL extends Database{
         else   
             $error = ['origin' => 'register', 'message' => 'Une erreur inattendue est survenue. Si le problème persiste, 
             veuillez contacter l\'assistance technique à <a href="mailto:assistance@shop.com">assistance@shop.com</a>.
-            <br>Revenir à l\'<a href="/">Accueil</a>.'];
+            <br>Revenir à l\'<a href="/shop/">Accueil</a>.'];
 
         if(!empty($error)) require VIEW . 'error/generator.php';
         elseif(!empty($confirm)) require VIEW . 'user/register/success.php';

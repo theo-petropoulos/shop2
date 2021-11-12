@@ -53,11 +53,11 @@ class ConnexionCTRL extends Database{
                         case 'user_not_found':
                         case 'invalid_mail':
                             $error = ['origin' => 'register', 'message' => 'Une erreur inattendue est survenue durant votre inscription. Veuillez 
-                            réessayer avec le lien contenu dans le mail qui vous a été envoyé.<br>Revenir à l\'<a href="/">Accueil</a>.'];
+                            réessayer avec le lien contenu dans le mail qui vous a été envoyé.<br>Revenir à l\'<a href="/shop/">Accueil</a>.'];
                             break;
                         case 'invalid_time':
                             $error = ['origin' => 'register', 'message' => 'Le lien d\'activation a expiré. Veuillez contacter l\'assistance technique à 
-                            <a href="mailto:support@minimal-shop.com">support@minimal-shop.com</a>.<br>Revenir à l\'<a href="/">Accueil</a>.'];
+                            <a href="mailto:support@minimal-shop.com">support@minimal-shop.com</a>.<br>Revenir à l\'<a href="/shop/">Accueil</a>.'];
                             break;
                         case 'valid_registration':
                             $confirm = 'success';
@@ -65,7 +65,7 @@ class ConnexionCTRL extends Database{
                         default:
                             $error = ['origin' => 'register', 'message' => 'Une erreur inattendue est survenue. Si le problème persiste, 
                             veuillez contacter l\'assistance technique à <a href="mailto:support@minimal-shop.com">support@minimal-shop.com</a>.
-                            <br>Revenir à l\'<a href="/">Accueil</a>.'];
+                            <br>Revenir à l\'<a href="/shop/">Accueil</a>.'];
                             break;
                     }
                 }
@@ -78,7 +78,7 @@ class ConnexionCTRL extends Database{
         else   
             $error = ['origin' => 'register', 'message' => 'Une erreur inattendue est survenue. Si le problème persiste, 
             veuillez contacter l\'assistance technique à <a href="mailto:support@minimal-shop.com">support@minimal-shop.com</a>.
-            <br>Revenir à l\'<a href="/">Accueil</a>.'];
+            <br>Revenir à l\'<a href="/shop/">Accueil</a>.'];
 
         if(!empty($error)) require VIEW . 'error/generator.php';
     }

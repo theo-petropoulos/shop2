@@ -6,6 +6,8 @@ footer {
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
@@ -16,10 +18,11 @@ footer {
 
 footer div {
   padding: 1% 2%;
-  width: 30%;
+  width: 25%;
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
+  min-width: 205px;
 }
 
 footer #footer_left {
@@ -67,5 +70,14 @@ footer #footer_right a:hover {
   color: #f0b000;
   -webkit-transition: color 0.3s;
   transition: color 0.3s;
+}
+
+@media screen and (max-width: 499px) {
+  footer #footer_left, footer #footer_middle, footer #footer_right {
+    text-align: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+  }
 }
 /*# sourceMappingURL=footer.css.map */

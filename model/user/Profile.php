@@ -13,11 +13,15 @@ class Profile extends Database{
         foreach($infos as $info => $value){
             $this->$info = htmlspecialchars($value, ENT_QUOTES);
         }
-        var_dump($this);
+        return $this;
     }
 
     public function getHis(string $item){
         return $this->$item ?? null;
+    }
+
+    public function disconnect(){
+        
     }
 
     private static function fetchInfos(string $authtoken = NULL){

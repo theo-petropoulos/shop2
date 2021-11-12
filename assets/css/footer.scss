@@ -7,14 +7,16 @@ $grey_light:rgb(109, 109, 109);
 footer{
     display:flex;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content:space-between;
     font-family: $font;
     border-top:1px solid $grey;
     background:white;
     div{
         padding:1% 2%;
-        width:30%;
+        width:25%;
         flex-grow:1;
+        min-width:205px;
     }
     #footer_left{
         text-align: left;
@@ -43,6 +45,15 @@ footer{
                 color:$orange_light;
                 transition:color 0.3s;
             }
+        }
+    }
+}
+
+@media screen and (max-width:499px){
+    footer{
+        #footer_left, #footer_middle, #footer_right{
+            text-align: center;
+            justify-content: center;
         }
     }
 }

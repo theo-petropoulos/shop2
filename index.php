@@ -34,37 +34,47 @@ $f3->route('GET /admin',
  * Users
  */
 $f3->route('GET /profil',
-    function($f3){        
+    function($f3){
         $session = new Session();
         if($session->authenticate()){
+            if(!empty($_GET['disconnect']) && $_GET['disconnect'] == 1){
+                $session->disconnect();
+                $f3->reroute('/');
+            }
+            elseif(!empty($_GET['modify']) && in_array($_GET['modify'], ['password', 'orders', 'addresses']))
+                $f3->set('action', 'modify');
+            else
+                $f3->set('action', 'profile');
             $title = 'PROFIL';
             require_once REQUIRES . 'head.php';
             require_once REQUIRES . 'header.php';
-            require MODEL . 'user/Profile.php';
-            $profile = new Profile(['authtoken' => $_COOKIE['authtoken']]);
+            require CONTROLLER . 'user/ProfileCTRL.php';
+            $page = new ProfileCTRL();
         }
         else{
             $f3->reroute('/connexion');
         }
-        // else{
-        //     $title = 'CONNEXION';
-        //     require_once REQUIRES . 'head.php';
-        //     require_once REQUIRES . 'header.php';
-        //     $f3->set('action', 'login_form');
-        //     require CONTROLLER . 'user/ConnectionCTRL.php';
-        //     $page = new ConnectionCTRL();
-        // }
     }
 );
 
 $f3->route('POST /profil',
     function($f3){
-        $title = 'CONNEXION';
-        require_once REQUIRES . 'head.php';
-        require_once REQUIRES . 'header.php';
-        $f3->set('action', 'login_submit');
-        require CONTROLLER . 'user/ConnexionCTRL.php';
-        $page = new ConnexionCTRL();
+        if(!empty($_POST['modify_password']) && $_POST['modify_password'] == 1){
+            $title = 'PROFIL';
+            require_once REQUIRES . 'head.php';
+            require_once REQUIRES . 'header.php';
+            $f3->set('action', 'modify_password');
+            require CONTROLLER . 'user/ProfileCTRL.php';
+            $page = new ProfileCTRL();
+        }
+        else if(!empty($_POST['login']) && $_POST['login'] == 1){
+            $title = 'CONNEXION';
+            require_once REQUIRES . 'head.php';
+            require_once REQUIRES . 'header.php';
+            $f3->set('action', 'login_submit');
+            require CONTROLLER . 'user/ConnexionCTRL.php';
+            $page = new ConnexionCTRL();
+        }
     }
 );
 

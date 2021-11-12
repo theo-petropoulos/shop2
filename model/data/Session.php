@@ -63,6 +63,16 @@ class Session extends Database{
         else return 0;
     }
 
+    public function disconnect(){
+        setcookie(
+            'authtoken',
+            '',
+            -1,
+            '/shop/',
+            'localhost'
+        );
+    }
+
     private static function refreshCookie($cookie){
         $cookie_options = array(
             'expires' => time() + 36000,

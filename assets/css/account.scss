@@ -1,0 +1,44 @@
+$font:'DotGothic16';
+$orange:rgb(240, 95, 0);
+$orange_light:rgb(240, 176, 0);
+$grey:rgb(45,45,45);
+$grey_light:rgb(109, 109, 109);
+
+#account{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    font-family: $font;
+    width:70%;
+    align-self: center;
+    text-align: center;
+    position:relative;
+    a{
+        color:$orange;
+        text-decoration: none;
+        &:hover{
+            color:$orange_light;
+            transition:all 0.3s;
+        }
+    }
+    span{
+        display:flex;
+        margin:2%;
+        width:100%;
+        position:relative;
+        justify-content: space-around;
+        a{
+            text-decoration: none;
+            padding:2% 4%;
+            background:white;
+            outline:0;
+            border:1px solid black;
+            margin:2%;
+            color:black;
+            &:hover{
+                background:rgb(202, 202, 202);
+                transition:all 0.3s;
+            }
+        }
+    }
+}

@@ -1,6 +1,7 @@
 @import url("password.css");
 @import url("landing.css");
 @import url("addresses.css");
+@import url("account.css");
 #profile {
   display: -webkit-box;
   display: -ms-flexbox;

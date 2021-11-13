@@ -15,7 +15,7 @@ class ConnexionCTRL extends Database{
              * If the user sent a login form
              */
             else if($f3->get('action') === 'login_submit'){
-                if(count($_POST) === 2 && !empty($_POST['mail']) && !empty($_POST['password']) && filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL)){
+                if(count($_POST) === 3 && !empty($_POST['mail']) && !empty($_POST['password']) && filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL)){
                     $user = new User($_POST);
                     switch($user->login()){
                         case 'login_success':
@@ -26,9 +26,9 @@ class ConnexionCTRL extends Database{
                             un mail vient de vous être envoyé afin de valider cette connexion.'];
                             break;
                         case 'inactive':
-                            $error = ['origin' => 'login', 'message' => 'Votre profil n\'est pas encore actif. Un mail d\'activation vous a été 
-                            envoyé au moment de l\'inscription. Si celui-ci a expiré, merci de contacter le support à 
-                            <a href="mailto:support@minimal-shop.com">support@minimal-shop.com</a>'];
+                            $error = ['origin' => 'login', 'message' => 'Votre profil n\'est pas encore actif ou a été supprimé à votre initiative. 
+                            Dans le premier cas, un mail d\'activation vous a été envoyé au moment de l\'inscription. Si celui-ci a expiré, 
+                            merci de contacter le support à <a href="mailto:support@minimal-shop.com">support@minimal-shop.com</a>'];
                             break;
                         case 'invalid_login':
                         default:

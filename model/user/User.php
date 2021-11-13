@@ -327,6 +327,7 @@ class User extends Database{
          * Insert keys and ivs into database
          */
         if($table === 'register'){
+            echo $this->password;
             $stmt = self::$db->prepare(
                 "BEGIN; 
                 INSERT INTO `clients` (`nom`, `prenom`, `mail`, `telephone`, `password`) VALUES (?, ?, ?, ?, ?); 

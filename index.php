@@ -47,6 +47,10 @@ $f3->route('GET /profil',
             }
             elseif(!empty($_GET['modify']) && in_array($_GET['modify'], ['password', 'orders', 'addresses']))
                 $f3->set('action', 'modify');
+            elseif(!empty($_GET['delete']) && $_GET['delete'] == 1 && !empty($_GET['confirm']) && $_GET['confirm'] == 1)
+                $f3->set('action', 'delete_confirm');
+            elseif(!empty($_GET['delete']) && $_GET['delete'] == 1)
+                $f3->set('action', 'delete');
             else
                 $f3->set('action', 'profile');
             require CONTROLLER . 'user/ProfileCTRL.php';

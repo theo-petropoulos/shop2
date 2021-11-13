@@ -28,6 +28,8 @@
                 <input type="text" name="rue" placeholder="Avenue des coquelicots" required>
             </span>
         </div>
+        <label for="complement">Complément d'adresse :</label>
+        <input type="text" name="complement">
         <label for="code_postal">Code postal :</label>
         <input type="number" name="code_postal" pattern="[0-9]{3}" placeholder="75015" required>
         <label for="ville">Ville :</label>

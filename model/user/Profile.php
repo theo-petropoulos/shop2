@@ -47,6 +47,25 @@ class Profile extends Database{
         else return 0;
     }
 
+    public function delete(){
+        $stmt = self::$db->prepare(
+            'UPDATE `clients` 
+            SET `active` = NULL
+            WHERE `authtoken` = ?;'
+        );
+        $stmt->execute([$this->authtoken]);
+        if($stmt->rowCount()){
+            setcookie(
+                'authtoken',
+                '',
+                -1,
+                '/shop/'
+            );
+            return 'success';
+        }
+        else return 'failure';
+    }
+
     private static function fetchInfos(string $authtoken = NULL){
         $stmt = self::$db->prepare(
             'SELECT c.`id` AS `id_client`, c.`nom`, c.`prenom`, c.`mail`, c.`telephone` 

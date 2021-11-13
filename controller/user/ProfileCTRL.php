@@ -70,6 +70,19 @@
                         l\'assistance technique à <a href="mailto:support@minimal-shop.com">support@minimal-shop.com</a>.'];
                     }
                 }
+                elseif($f3->get('action') === 'delete'){
+                    require VIEW . 'user/profile/account.php';
+                }
+                elseif($f3->get('action') === 'delete_confirm'){
+                    $profile = new Profile(['authtoken' => $_COOKIE['authtoken']]);
+                    if($profile->delete() == 'success'){
+                        $success = 1;
+                        require VIEW . 'user/profile/account.php';
+                    }
+                    else 
+                        $error = ['origin' => 'delete_account', 'message' => 'Une erreur est survenue pendant la suppression de votre compte. Veuillez réessayer 
+                        ou contacter l\'assistance technique à <a href="mailto:support@minimal-shop.com">support@minimal-shop.com</a>.'];
+                }
             }
             else   
                 $error = ['origin' => 'profile', 'message' => 'Une erreur inattendue est survenue. Si le problème persiste, 

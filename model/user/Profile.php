@@ -22,7 +22,7 @@ class Profile extends Database{
 
     public function fetchAddresses(){
         $stmt = self::$db->prepare(
-            'SELECT a.nom, a.prenom, a.numero, a.rue, a.complement, a.code_postal, a.ville 
+            'SELECT a.id, a.nom, a.prenom, a.numero, a.rue, a.complement, a.code_postal, a.ville 
             FROM adresses a 
             WHERE a.id_client = ( SELECT c.id FROM clients c WHERE c.authtoken = ? );'
         );

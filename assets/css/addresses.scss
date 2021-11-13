@@ -88,12 +88,50 @@ $grey_light:rgb(109, 109, 109);
             margin-bottom:1%;
         }
     }
+    #registered_addresses{
+        display:flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        width:90%;
+        position:relative;
+        div{
+            display:flex;
+            flex-direction: column;
+            width:25%;
+            min-width: 175px;
+            position:relative;
+            border:1px solid black;
+            margin:2%;
+            padding:1% 2%;
+            button{
+                position:absolute;
+                top:3%;
+                right:3%;
+                background:white;
+                border-radius: none;
+                outline: none;
+                border:1px solid black;
+                padding:1%;
+                &:hover{
+                    background:rgb(209, 209, 209);
+                    cursor:pointer;
+                    transition:all 0.3s;
+                }
+            }
+        }
+    }
 }
 
 @media screen and(max-width:499px){
     #addresses{
         form{
             width:95%;
+        }
+        #registered_addresses{
+            div{
+                flex-grow: 1;
+            }
         }
     }
 }

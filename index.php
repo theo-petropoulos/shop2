@@ -37,6 +37,10 @@ $f3->route('GET /profil',
     function($f3){
         $session = new Session();
         if($session->authenticate()){
+            $title = 'PROFIL';
+            require_once REQUIRES . 'head.php';
+            require_once REQUIRES . 'header.php';
+            echo "<script src='" . SCRIPTS . "delete_address.js'></script>";
             if(!empty($_GET['disconnect']) && $_GET['disconnect'] == 1){
                 $session->disconnect();
                 $f3->reroute('/');
@@ -45,9 +49,6 @@ $f3->route('GET /profil',
                 $f3->set('action', 'modify');
             else
                 $f3->set('action', 'profile');
-            $title = 'PROFIL';
-            require_once REQUIRES . 'head.php';
-            require_once REQUIRES . 'header.php';
             require CONTROLLER . 'user/ProfileCTRL.php';
             $page = new ProfileCTRL();
         }

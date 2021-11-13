@@ -1,9 +1,16 @@
 <main id="addresses">
     <h2>Carnet d'adresses</h2>
     <section id="registered_addresses">
-        <?php if(!empty($addresses)){ var_dump($addresses);
+        <?php if(!empty($addresses)){
             foreach($addresses as $key => $address){ ?>
-
+                <div id="address_<?=$address['id'];?>">
+                    <button class="delete_address">X</button>
+                    <p><?=$address['nom'];?></p>
+                    <p><?=$address['prenom'];?></p>
+                    <p><?=$address['numero'] . " " . $address['rue'];?></p>
+                    <p><?=str_pad($address['code_postal'], 5, '0', STR_PAD_LEFT);?></p>
+                    <p><?=$address['ville'];?></p>
+                </div>
             <?php } ?>
         <?php } ?>
     </section>

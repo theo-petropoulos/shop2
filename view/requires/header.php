@@ -6,7 +6,7 @@ ob_start();
     <header id="header_nav">
         <div id="header_left">
             <a href="/shop/">
-                <h1>Minimal<br>SHOP</h1>
+                <h1><span>Minimal</span><br><span>SHOP</span></h1>
             </a>
         </div>
         <div id="header_right">

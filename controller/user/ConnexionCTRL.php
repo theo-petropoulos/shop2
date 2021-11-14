@@ -1,6 +1,6 @@
 <?php
 
-class ConnexionCTRL extends Database{
+class ConnexionCTRL{
     
     public function __construct(){
         $f3 = Base::instance();
@@ -9,7 +9,7 @@ class ConnexionCTRL extends Database{
              * If the user wants to login
              */
             if($f3->get('action') === 'login_form'){
-                require_once VIEW . 'user/login.php';
+                require_once VIEW . 'user/login/form.php';
             }
             /**
              * If the user sent a login form
@@ -47,36 +47,37 @@ class ConnexionCTRL extends Database{
                     $user = new User(['mail' => $_GET['o'], 'crypted_mail' => $_GET['m'], 'crypted_time' => $_GET['t'], 'ip' => base64_decode($_GET['i'])]);
                     switch($user->confirmLogin()){
                         case 'already_connected':
-                            $error = ['origin' => 'register', 'message' => 'Ce lien d\'activation a déjà utilisé. Vous pouvez maintenant vous
+                            $error = ['origin' => 'login', 'message' => 'Ce lien d\'activation a déjà utilisé. Vous pouvez maintenant vous
                             <a href="profil">connecter</a>.'];
                             break;
                         case 'user_not_found':
                         case 'invalid_mail':
-                            $error = ['origin' => 'register', 'message' => 'Une erreur inattendue est survenue durant votre inscription. Veuillez 
+                            $error = ['origin' => 'login', 'message' => 'Une erreur inattendue est survenue durant votre inscription. Veuillez 
                             réessayer avec le lien contenu dans le mail qui vous a été envoyé.<br>Revenir à l\'<a href="/shop/">Accueil</a>.'];
                             break;
                         case 'invalid_time':
-                            $error = ['origin' => 'register', 'message' => 'Le lien d\'activation a expiré. Veuillez contacter l\'assistance technique à 
+                            $error = ['origin' => 'login', 'message' => 'Le lien d\'activation a expiré. Veuillez contacter l\'assistance technique à 
                             <a href="mailto:support@minimal-shop.com">support@minimal-shop.com</a>.<br>Revenir à l\'<a href="/shop/">Accueil</a>.'];
                             break;
                         case 'valid_registration':
                             $confirm = 'success';
+                            require VIEW . 'user/login/form.php';
                             break;
                         default:
-                            $error = ['origin' => 'register', 'message' => 'Une erreur inattendue est survenue. Si le problème persiste, 
+                            $error = ['origin' => 'login', 'message' => 'Une erreur inattendue est survenue. Si le problème persiste, 
                             veuillez contacter l\'assistance technique à <a href="mailto:support@minimal-shop.com">support@minimal-shop.com</a>.
                             <br>Revenir à l\'<a href="/shop/">Accueil</a>.'];
                             break;
                     }
                 }
                 else
-                    $error = ['origin' => 'register', 'message' => 'Une erreur est survenue pendant l\'activation de votre compte. Veuillez réessayer 
+                    $error = ['origin' => 'login', 'message' => 'Une erreur est survenue pendant l\'activation de votre compte. Veuillez réessayer 
                     en suivant le lien contenu dans le mail qui vous a été envoyé. Si le problème persiste, veuillez contacter l\'assistance technique à 
                     <a href="mailto:support@minimal-shop.com">support@minimal-shop.com</a>.'];
             }
         }
         else   
-            $error = ['origin' => 'register', 'message' => 'Une erreur inattendue est survenue. Si le problème persiste, 
+            $error = ['origin' => 'connect', 'message' => 'Une erreur inattendue est survenue. Si le problème persiste, 
             veuillez contacter l\'assistance technique à <a href="mailto:support@minimal-shop.com">support@minimal-shop.com</a>.
             <br>Revenir à l\'<a href="/shop/">Accueil</a>.'];
 

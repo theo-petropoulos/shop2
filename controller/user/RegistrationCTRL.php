@@ -1,6 +1,6 @@
 <?php
 
-class RegistrationCTRL extends Database{
+class RegistrationCTRL{
     public function __construct(){
         $f3 = Base::instance();
         if(!empty($f3->get('action'))){

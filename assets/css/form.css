@@ -1,0 +1,71 @@
+#admin {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  position: relative;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-family: "DotGothic16";
+}
+
+#admin form {
+  width: 65%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 2%;
+  border: 1px solid black;
+}
+
+#admin form input {
+  margin: 1%;
+  width: 70%;
+  text-align: center;
+}
+
+#admin form input[type=submit] {
+  margin: 2%;
+  background: #2d2d2d;
+  color: white;
+  font-family: "DotGothic16";
+  outline: 0;
+  border: 1px solid black;
+  border-radius: none;
+  padding: 1% 0;
+  font-size: calc(10px + 0.5vw);
+  line-height: calc(10px + 0.5vw);
+}
+
+#admin form input[type=submit]:hover {
+  background: #6d6d6d;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  cursor: pointer;
+  font-size: calc(13px + 0.5vw);
+}
+
+@media screen and (max-width: 499px) {
+  #admin form {
+    width: 80%;
+  }
+}
+/*# sourceMappingURL=form.css.map */

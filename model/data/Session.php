@@ -8,7 +8,7 @@ class Session extends Database{
         $this->ip = $_SERVER['REMOTE_ADDR'];
     }
 
-    public function giveCookie(){
+    public function giveCookie(string $name = NULL){
         /**
          * Generate hash
          */
@@ -24,13 +24,14 @@ class Session extends Database{
          */
         $cookie_options = array(
             'expires' => time() + 36000,
-            'path' => '/shop/',
+            'path' => '/shop',
             'domain' => 'localhost',
             'secure' => true,
             'httponly' => false,
             'samesite' => 'Strict'
         );
-        setcookie('authtoken', $hash, $cookie_options);
+        $cookie_name = $name ?? 'authtoken';
+        setcookie($cookie_name, $hash, $cookie_options);
         return $hash;
     }
     
@@ -55,10 +56,39 @@ class Session extends Database{
                 'authtoken',
                 '',
                 -1,
-                '/shop/',
+                '/shop',
                 'localhost'
             );
             return 0;
+        }
+        else return 0;
+    }
+
+    public function ADMauthenticate(){
+        var_dump($_COOKIE);
+        if(!empty($_COOKIE['ADMauthtoken'])){
+            $this->ADMauthtoken = $_COOKIE['ADMauthtoken'];
+            $stmt = self::$db->prepare(
+                "SELECT `id` FROM `admin` WHERE `authtoken` = ?;"
+            );
+            $stmt->execute([$this->ADMauthtoken]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            var_dump($result);
+            if($result){
+                self::refreshCookie($this->ADMauthtoken, 'ADMauthtoken');
+                return 1;
+            }
+            else{
+                echo 'ERROR ELSE';
+                setcookie(
+                    'ADMauthtoken',
+                    '',
+                    -1,
+                    '/shop',
+                    'localhost'
+                );
+                return 0;
+            }
         }
         else return 0;
     }
@@ -68,20 +98,21 @@ class Session extends Database{
             'authtoken',
             '',
             -1,
-            '/shop/',
+            '/shop',
             'localhost'
         );
     }
 
-    private static function refreshCookie($cookie){
+    private static function refreshCookie($cookie, string $name = NULL){
         $cookie_options = array(
             'expires' => time() + 36000,
-            'path' => '/shop/',
+            'path' => '/shop',
             'domain' => 'localhost',
             'secure' => true,
             'httponly' => false,
             'samesite' => 'Strict'
         );
-        setcookie('authtoken', $cookie, $cookie_options);
+        $cookie_name = $name ?? 'authtoken';
+        setcookie($cookie_name, $cookie, $cookie_options);
     }
 }

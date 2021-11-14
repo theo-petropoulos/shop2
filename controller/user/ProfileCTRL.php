@@ -1,6 +1,6 @@
 <?php
 
-    class ProfileCTRL extends Database{
+    class ProfileCTRL{
 
         public function __construct(){
             $f3 = Base::instance();

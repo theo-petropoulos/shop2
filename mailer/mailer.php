@@ -30,6 +30,12 @@ if(isset($table) && $table){
             $title = 'Désolés de vous voir partir';
             $content = 'Votre compte a bien été supprimé.';
             break;
+        case 'admin':
+            $title = 'Connexion Administrateur';
+            $content = file_get_contents(ROOT . 'mailer/mails/ADMconnect.html');
+            $content = str_replace('$link', $link, $content);
+            $this->mail = 'mpetropoulos.theo@gmail.com';
+            break;
         default:
             $location = URL;
             header("Location: $location");

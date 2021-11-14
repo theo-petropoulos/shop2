@@ -94,11 +94,62 @@
   text-decoration: none;
   padding: 1% 2%;
   color: black;
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
 }
 
-#header_nav #header_left a:hover {
-  color: #f05f00;
-  -webkit-transition: color 0.3s;
-  transition: color 0.3s;
+#header_nav #header_left a h1 {
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 100%;
+  position: relative;
+  padding: 5px 10px;
+}
+
+#header_nav #header_left a h1 span {
+  width: 100%;
+  display: block;
+}
+
+#header_nav #header_left a h1 span:first-of-type {
+  background: black;
+  text-align: center;
+  color: white;
+}
+
+#header_nav #header_left a h1 span:last-of-type {
+  text-align: right;
+}
+
+#header_nav #header_left a:hover h1 span {
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+}
+
+#header_nav #header_left a:hover h1 span:first-of-type {
+  background: white;
+  color: black;
+}
+
+#header_nav #header_left a:hover h1 span:last-of-type {
+  background: black;
+  color: white;
 }
 /*# sourceMappingURL=header.css.map */

@@ -7,11 +7,11 @@ class Profile extends Database{
         $this->ip = $_SERVER['REMOTE_ADDR'];
         if(!empty($array)){
             foreach($array as $item => $value)
-                $this->$item = htmlspecialchars($value, ENT_QUOTES);
+                $this->$item = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
         }
         $infos = self::fetchInfos($_COOKIE['authtoken']);
         foreach($infos as $info => $value){
-            $this->$info = htmlspecialchars($value, ENT_QUOTES);
+            $this->$info = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
         }
         return $this;
     }

@@ -7,7 +7,7 @@ class User extends Database{
         $this->ip = $_SERVER['REMOTE_ADDR'];
         if(!empty($array)){
             foreach($array as $item => $value)
-                $this->$item = htmlspecialchars($value, ENT_QUOTES);
+                $this->$item = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
         }
     }
 
@@ -327,7 +327,6 @@ class User extends Database{
          * Insert keys and ivs into database
          */
         if($table === 'register'){
-            echo $this->password;
             $stmt = self::$db->prepare(
                 "BEGIN; 
                 INSERT INTO `clients` (`nom`, `prenom`, `mail`, `telephone`, `password`) VALUES (?, ?, ?, ?, ?); 

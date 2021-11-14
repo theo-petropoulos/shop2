@@ -1,4 +1,7 @@
 <main id="connexion">
+    <?php if(!empty($confirm)){ ?>
+    <p>Vous venez d'authentifier l'appareil, vous pouvez à présent vous connecter.</p>
+    <?php } ?>
     <div id="connexion_header">
         <h3>CONNEXION</h3>
         <h4>Vous n'êtes pas encore inscrit ? <a href="inscription">INSCRIPTION</a></h4>

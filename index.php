@@ -14,7 +14,7 @@ $f3->route('GET /',
         $title = 'ACCUEIL';
         require_once REQUIRES . 'head.php';
         require_once REQUIRES . 'header.php';
-        require 'controller/IndexCTRL.php';
+        require CONTROLLER . 'IndexCTRL.php';
         $page = new IndexCTRL();
     }
 );
@@ -27,6 +27,34 @@ $f3->route('GET /admin',
         $title = 'ADMINISTRATION';
         require_once REQUIRES . 'head.php';
         require_once REQUIRES . 'header.php';
+        $session = new Session();
+        if($session->ADMauthenticate())
+            echo "connected";
+            // $f3->set('action', 'admin_landing');
+        else{
+            if(!empty($_GET['l']) && !empty($_GET['a']) && !empty($_GET['o']) && !empty($_GET['t']))
+                $f3->set('action', 'admin_login_confirm');
+            else 
+                $f3->set('action', 'admin_login');
+        }
+        require CONTROLLER . 'admin/AdminCTRL.php';
+        $page = new AdminCTRL();
+    }
+);
+
+$f3->route('POST /admin',
+    function($f3, $params){
+        $title = 'ADMINISTRATION';
+        require_once REQUIRES . 'head.php';
+        require_once REQUIRES . 'header.php';
+        $session = new Session();
+        if($session->ADMauthenticate()){
+
+        }
+        else
+            $f3->set('action', 'admin_login_submit');
+        require CONTROLLER . 'admin/AdminCTRL.php';
+        $page = new AdminCTRL();
     }
 );
 

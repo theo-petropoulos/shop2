@@ -1,0 +1,85 @@
+$font:'DotGothic16';
+$orange:rgb(240, 95, 0);
+$orange_light:rgb(240, 176, 0);
+$grey:rgb(45,45,45);
+$grey_light:rgb(109, 109, 109);
+$blue: rgb(25, 90, 240);
+$blue_light: rgb(90, 190, 255);
+$yellow:rgb(240, 176, 0);
+$green:rgb(65, 170, 50);
+
+#admin{
+    #clients{
+        display:flex;
+        flex-direction: column;
+        width:90%;
+        border:1px solid black;
+        padding:2%;
+        justify-content: stretch;
+        align-items: flex-start;
+        text-align: center;
+        .client_div{
+            display:flex;
+            flex-direction: row;
+            width:100%;
+            justify-content: space-between;
+            border-bottom:1px solid black;
+            margin:calc(max(1%, 15px));
+            padding:1% 0%;
+            flex-wrap: wrap;
+            &:last-of-type{
+                border-bottom:none;
+            }
+            div{
+                width:20%;
+                flex-grow: 1;
+                min-width: 175px;
+                &.active{
+                    width:5%;
+                }
+                &.nom, &.prenom, &.telephone{
+                    width:10%;
+                }
+                &.mail{
+                    width:25%;
+                    min-width:255px;
+                }
+                &.show_history{
+                    text-align: center;
+                    min-width:200px;
+                    a{
+                        text-decoration: none;
+                        color:$blue;
+                        &:hover{
+                            color:$blue_light;
+                            transition:all 0.3s;
+                        }
+                    }
+                }
+                button{
+                    outline:0;
+                    border-radius: none;
+                    border:1px solid black;
+                    background:$yellow;
+                    color:black;
+                    padding:1% 2%;
+                    &:hover{
+                        background:$green;
+                        cursor:pointer;
+                        transition:all 0.3s;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width:499px){
+    #admin{
+        #clients{
+            .client_div{
+                text-align: center;
+            }
+        }
+    }
+}

@@ -106,4 +106,37 @@ class Admin extends Database{
         }
         else return 'invalid_user';
     }
+
+    public function setNewPassword(){
+        if(!empty($this->password) && !empty($_POST['cpassword'])){
+            if($this->password === $this->cpassword){
+                if(self::verifyPwd($this->password)){
+                    $stmt = self::$db->prepare(
+                        'UPDATE `admin` 
+                        SET `password` = ? 
+                        WHERE `authtoken` = ?'
+                    );
+                    $stmt->execute([password_hash($this->password, PASSWORD_DEFAULT), $this->authtoken]);
+                    if($stmt->rowCount())
+                        return 'modify_success';
+                    else
+                        return 'modify_failure';
+                }
+                else return 'invalid_strenght';
+            }
+            else return 'invalid_match';
+        }
+        else return 'invalid_input';
+    }
+
+    protected static function verifyPwd(string $password){
+        if( !preg_match('@[A-Z]@', $password) || !preg_match('@[a-z]@', $password) ||
+			!preg_match('@[0-9]@', $password) || !preg_match('@[^\w]@', $password) ||
+			strlen($password)<8 ){
+				return 0;
+			}
+		else{
+			return 1;
+		}
+    }
 }

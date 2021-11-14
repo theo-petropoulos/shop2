@@ -4,13 +4,13 @@ class AdminCTRL{
 
     public function __construct(){
         $f3 = Base::instance();
+        require MODEL . 'admin/Admin.php';
         if(!empty($f3->get('action'))){
             if($f3->get('action') === 'admin_login'){
                 require VIEW . 'admin/login/form.php';
             }
             elseif($f3->get('action') === 'admin_login_submit'){
                 if(!empty($_POST['admin_login']) && $_POST['admin_login'] == 1 && !empty($_POST['login']) && !empty($_POST['password'])){
-                    require MODEL . 'admin/Admin.php';
                     $admin = new Admin($_POST);
                     switch($admin->login()){
                         case 'success':
@@ -34,15 +34,68 @@ class AdminCTRL{
                     <a href="mailto:support@minimal-shop.com">support@minimal-shop.com</a>.'];
             }
             elseif($f3->get('action') === 'admin_login_confirm'){
-                require MODEL . 'admin/Admin.php';
                 $admin = new Admin($_GET);
                 switch($admin->confirmLogin()){
                     case 'success':
-                        $f3->reroute('admin');
+                        header("Refresh:0; url=/shop/admin");
                         break;
                     default:
                         $error = ['origin' => 'admin_login_confirm', 'message' => 'Une erreur est survenue, veuillez vérifier le lien d\'authentification 
                         et contacter l\'équipe technique à <a href="mailto:support@minimal-shop.com">support@minimal-shop.com</a> si le problème persiste.'];
+                        break;
+                }
+            }
+            elseif($f3->get('action') === 'admin_landing'){
+                require VIEW . 'admin/landing/index.php';
+            }
+            elseif($f3->get('action') === 'modify'){
+                switch($_GET['modify']){
+                    case 'password':
+                        require VIEW . 'admin/modify/password.php';
+                        break;
+                    case 'clients':
+                        require MODEL . 'admin/Manager.php';
+                        $manager = new Manager();
+                        $clients = $manager->fetchClients();
+                        require VIEW . 'admin/modify/clients.php';
+                        break;
+                    default:
+                        $error = ['origin' => 'admin_modify', 'message' => 'Une erreur inattendue est survenue. Si le problème persiste, 
+                        veuillez contacter l\'assistance technique à <a href="mailto:assistance@shop.com">assistance@shop.com</a>.
+                        <br>Revenir à l\'<a href="/shop/">Accueil</a>.'];
+                        break;
+                }
+            }
+            elseif($f3->get('action') === 'modify_password'){
+                $_POST['authtoken'] = $_COOKIE['ADMauthtoken'];
+                $admin = new Admin($_POST);
+                switch($admin->setNewPassword()){
+                    case 'modify_success':
+                        $success = 1;
+                        require VIEW . 'admin/modify/password.php';
+                        break;
+                    case 'modify_failure':
+                        $error = ['origin' => 'profile_password', 'message' => 'Une erreur est survenue pendant la mise à jour de votre mot de passe. 
+                        Veuillez essayer de vous déconnecter / reconnecter, puis renouveller la tentative. Si le problème persiste, veuillez contacter 
+                        l\'assistance technique à <a href="mailto:support@minimal-shop.com">support@minimal-shop.com</a>.']; 
+                        break;
+                    case 'invalid_strenght':
+                        $error = ['origin' => 'profile_password', 'message' => 'Le mot de passe n\'est pas assez fort. Pour rappel, il doit faire 
+                        au moins 8 caractères de long et contenir au moins:<br>
+                        - Une lettre majuscule<br>
+                        - Une lettre minuscule<br> 
+                        - Un chiffre<br>
+                        - Un caractère spécial<br>
+                        Veuillez <a href="admin?modify=password">réessayer</a>.'];
+                        break;
+                    case 'invalid_match':
+                        $error = ['origin' => 'profile_password', 'message' => 'Les mots de passe ne correspondent pas. 
+                        Veuillez <a href="admin?modify=password">réessayer</a>.'];
+                        break;
+                    case 'invalid_input':
+                    default:
+                        $error = ['origin' => 'profile_password', 'message' => 'Une erreur inattendue est survenue pendant la modification de votre 
+                        mot de passe. Veuillez <a href="admin?modify=password">réessayer</a>.'];
                         break;
                 }
             }

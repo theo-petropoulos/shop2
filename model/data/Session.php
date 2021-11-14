@@ -65,7 +65,6 @@ class Session extends Database{
     }
 
     public function ADMauthenticate(){
-        var_dump($_COOKIE);
         if(!empty($_COOKIE['ADMauthtoken'])){
             $this->ADMauthtoken = $_COOKIE['ADMauthtoken'];
             $stmt = self::$db->prepare(
@@ -73,13 +72,11 @@ class Session extends Database{
             );
             $stmt->execute([$this->ADMauthtoken]);
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            var_dump($result);
             if($result){
                 self::refreshCookie($this->ADMauthtoken, 'ADMauthtoken');
                 return 1;
             }
             else{
-                echo 'ERROR ELSE';
                 setcookie(
                     'ADMauthtoken',
                     '',
@@ -93,9 +90,10 @@ class Session extends Database{
         else return 0;
     }
 
-    public function disconnect(){
+    public function disconnect(string $name = NULL){
+        $cookie_name = $name ?? 'authtoken';
         setcookie(
-            'authtoken',
+            $cookie_name,
             '',
             -1,
             '/shop',

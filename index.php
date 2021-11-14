@@ -28,9 +28,17 @@ $f3->route('GET /admin',
         require_once REQUIRES . 'head.php';
         require_once REQUIRES . 'header.php';
         $session = new Session();
-        if($session->ADMauthenticate())
-            echo "connected";
-            // $f3->set('action', 'admin_landing');
+        if($session->ADMauthenticate()){
+            echo "<script src='" . SCRIPTS . "admin_clients.js'></script>";
+            if(!empty($_GET['disconnect']) && $_GET['disconnect'] == 1){
+                $session->disconnect('ADMauthtoken');
+                $f3->reroute('/');
+            }
+            elseif(!empty($_GET['modify']) && in_array($_GET['modify'], ['password', 'clients', 'products']))
+                $f3->set('action', 'modify');
+            else
+                $f3->set('action', 'admin_landing');
+        }
         else{
             if(!empty($_GET['l']) && !empty($_GET['a']) && !empty($_GET['o']) && !empty($_GET['t']))
                 $f3->set('action', 'admin_login_confirm');
@@ -49,7 +57,18 @@ $f3->route('POST /admin',
         require_once REQUIRES . 'header.php';
         $session = new Session();
         if($session->ADMauthenticate()){
-
+            $keys = array_keys($_POST);
+            $i = 0;
+            foreach($keys as $k => $key){
+                if(str_contains($key, 'modify_'))
+                    $i++;
+            }
+            if($i){
+                if(!empty($_POST['modify_password']) && $_POST['modify_password'] == 1)
+                    $f3->set('action', 'modify_password');
+                elseif(!empty($_POST['modify_address']) && $_POST['modify_address'] == 1)
+                    $f3->set('action', 'modify_address');
+            }
         }
         else
             $f3->set('action', 'admin_login_submit');

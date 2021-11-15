@@ -54,10 +54,18 @@ class AdminCTRL{
                         require VIEW . 'admin/modify/password.php';
                         break;
                     case 'clients':
+                        echo "<script src='" . SCRIPTS . "admin_clients.js'></script>";
                         require MODEL . 'admin/Manager.php';
                         $manager = new Manager();
                         $clients = $manager->fetchClients();
                         require VIEW . 'admin/modify/clients.php';
+                        break;
+                    case 'products':
+                        echo "<script src='" . SCRIPTS . "admin_products.js'></script>";
+                        require MODEL . 'admin/Manager.php';
+                        $manager = new Manager();
+                        $content = $manager->fetchProducts();
+                        require VIEW . 'admin/modify/products.php';
                         break;
                     default:
                         $error = ['origin' => 'admin_modify', 'message' => 'Une erreur inattendue est survenue. Si le problème persiste, 

@@ -1,7 +1,7 @@
 <main id="profile">
     <section id="landing">
         <div id="landing_titles">
-            <h2>Bonjour <?=$profile->prenom;?></h2>
+            <h2>Bonjour <?=html_entity_decode($profile->prenom, ENT_QUOTES, 'UTF-8');?></h2>
             <a href="profil?disconnect=1">Se déconnecter</a>
         </div>
         <div id="landing_content">

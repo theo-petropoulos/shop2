@@ -5,7 +5,7 @@ abstract class Database{
 
     public function __construct(){
         self::$db = new DB\SQL(
-            'mysql:host=localhost;port=3306;dbname=shop',
+            'mysql:host=localhost;port=3306;dbname=shop;charset=UTF8mb4',
             'root',
             ''
         );

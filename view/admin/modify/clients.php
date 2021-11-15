@@ -1,6 +1,6 @@
 <main id="admin">
     <div id="clients">
-        <?php foreach($clients as $key => $client){ ?>
+        <?php if(!empty($clients)) : foreach($clients as $key => $client){ ?>
             <div id="client_<?=$client['id'];?>" class="client_div">
                 <?php foreach($client as $key => $value){
                     if($key !== 'id'){ ?>
@@ -14,6 +14,7 @@
                     <a href="admin?modify=clients&id=<?=$client['id'];?>">Afficher l'historique des achats</a>
                 </div>
             </div>
-        <?php } ?>
+        <?php } endif; ?>
     </div>
+    <a href="admin" id="back_btn">Retour</a>
 </main>

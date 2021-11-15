@@ -2,4 +2,24 @@
 @import url("admlanding.css");
 @import url("admpassword.css");
 @import url("admclients.css");
+@import url("admproducts.css");
+a#back_btn {
+  font-family: "DotGothic16";
+  background: white;
+  padding: 1% 2%;
+  border: 1px solid black;
+  text-decoration: none;
+  margin: 2%;
+  text-align: center;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  color: black;
+}
+
+a#back_btn:hover {
+  background: #c3c3c3;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
 /*# sourceMappingURL=admin.css.map */

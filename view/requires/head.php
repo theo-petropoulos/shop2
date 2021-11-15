@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta charset="UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <link rel="stylesheet" href="/shop/assets/css/globals.css?v=<?php echo time(); ?>">
         <link rel="stylesheet" 
             href="/shop/assets/css/<?=explode('/', $f3->hive()['PATH'])[1] ? explode('/', $f3->hive()['PATH'])[1] : 'index';?>.css?v=<?php echo time(); ?>">

@@ -12,4 +12,23 @@ class Manager extends Database{
         );
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function fetchProducts(){
+        $content = [];
+        $stmt = self::$db->query(
+            'SELECT p.`id`, m.`nom` AS `nom_marque`, p.`nom` AS `nom_produit`, p.`description`, p.`stock`, p.`image_path`, p.`active` 
+            FROM `produits` p 
+            INNER JOIN `marques` m 
+            ON m.`id` = p.`id_marque` 
+            ORDER BY `nom_marque`, `id`;'
+        );
+        $content['produits'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = self::$db->query(
+            'SELECT `id`, `nom`, `description`, `active`  
+            FROM `marques`
+            ORDER BY `active` DESC, `nom` ASC;'
+        );
+        $content['marques'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $content;
+    }
 }

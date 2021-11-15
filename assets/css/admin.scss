@@ -2,9 +2,30 @@
 @import url('admlanding.css');
 @import url('admpassword.css');
 @import url('admclients.css');
+@import url('admproducts.css');
 
 $font:'DotGothic16';
 $orange:rgb(240, 95, 0);
 $orange_light:rgb(240, 176, 0);
 $grey:rgb(45,45,45);
 $grey_light:rgb(109, 109, 109);
+$blue: rgb(25, 90, 240);
+$blue_light: rgb(90, 190, 255);
+$yellow:rgb(240, 176, 0);
+$green:rgb(65, 170, 50);
+
+a#back_btn{
+    font-family: $font;
+    background:white;
+    padding:1% 2%;
+    border:1px solid black;
+    text-decoration: none;
+    margin:2%;
+    text-align: center;
+    width:max-content;
+    color:black;
+    &:hover{
+        background:rgb(195, 195, 195);
+        transition:all 0.3s;
+    }
+}

@@ -29,7 +29,6 @@ $f3->route('GET /admin',
         require_once REQUIRES . 'header.php';
         $session = new Session();
         if($session->ADMauthenticate()){
-            echo "<script src='" . SCRIPTS . "admin_clients.js'></script>";
             if(!empty($_GET['disconnect']) && $_GET['disconnect'] == 1){
                 $session->disconnect('ADMauthtoken');
                 $f3->reroute('/');

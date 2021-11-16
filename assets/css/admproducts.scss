@@ -17,6 +17,44 @@ $green:rgb(65, 170, 50);
     align-items: center;
     padding:2%;
     box-sizing: border-box;
+    #adm_search_container{
+        display:flex;
+        width:90%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        position:relative;
+        margin:calc(max(1%, 10px));
+        #adm_search_marques, #adm_search_produits{
+            width:40%;
+            flex-grow: 1;
+            min-width: 200px;
+            position:relative;
+            h3{
+                font-family: $font;
+                line-height: calc(20px + 1.2vw);
+                font-size: calc(20px + 1.2vw);
+                margin:1% 0%;
+            }
+            input{
+                width:80%;
+                line-height: calc(20px + 1.2vw);
+                font-size: calc(20px + 1.2vw);
+                font-family: $font;
+            }
+            button{
+                font-size: calc(20px + 1.2vw);
+                line-height: calc(20px + 1.2vw);
+                background:none;
+                border:none;
+                color:$orange;
+                &:hover{
+                    color:$green;
+                    cursor:pointer;
+                    transition:all 0.3s;
+                }
+            }
+        }
+    }
     #produits{
         width:90%;
         position:relative;

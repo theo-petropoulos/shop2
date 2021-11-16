@@ -16,7 +16,7 @@ class Manager extends Database{
     public function fetchProducts(){
         $content = [];
         $stmt = self::$db->query(
-            'SELECT p.`id`, m.`nom` AS `nom_marque`, m.`active`, p.`nom` AS `nom_produit`, p.`description`, p.`prix`, p.`stock`, p.`active` 
+            'SELECT p.`id`, m.`nom` AS `nom_marque`, p.`nom` AS `nom_produit`, p.`description`, p.`prix`, p.`stock`, p.`active` 
             FROM `produits` p 
             INNER JOIN `marques` m 
             ON m.`id` = p.`id_marque` 

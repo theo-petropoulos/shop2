@@ -128,12 +128,34 @@ class JSHandler{
     public function ADMdelete(){
         if($this->adm_delete === 'produits'){
             $stmt = self::$db->prepare(
+                "SELECT `image_path` 
+                FROM $this->adm_delete 
+                WHERE `id` = ?;"
+            );
+            $stmt->execute([$this->id]);
+            if(!empty($result = $stmt->fetch(PDO::FETCH_ASSOC))){
+                $this->path = $_SERVER['DOCUMENT_ROOT'] . '/shop/' . $result['image_path'];
+                is_file($this->path) ? unlink($this->path) : null;
+            }
+            $stmt = self::$db->prepare(
                 "DELETE FROM $this->adm_delete 
                 WHERE `id` = ?;"
             );
             $stmt->execute([$this->id]);
         }
         elseif($this->adm_delete === 'marques'){
+            $stmt = self::$db->prepare(
+                "SELECT `image_path`
+                FROM `produits` 
+                WHERE `id_marque` = ?;"
+            );
+            $stmt->execute([$this->id]);
+            if(!empty($results = $stmt->fetchAll(PDO::FETCH_ASSOC))){
+                foreach($results as $key => $result){
+                    $this->path = $_SERVER['DOCUMENT_ROOT'] . '/shop/' . $result['image_path'];
+                    is_file($this->path) ? unlink($this->path) : null;
+                }
+            }
             $stmt = self::$db->prepare(
                 "BEGIN;
                 DELETE FROM `produits` 

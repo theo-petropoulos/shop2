@@ -19,6 +19,59 @@
           box-sizing: border-box;
 }
 
+#admin_alt #adm_search_container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 90%;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  position: relative;
+  margin: calc(max(1%, 10px));
+}
+
+#admin_alt #adm_search_container #adm_search_marques, #admin_alt #adm_search_container #adm_search_produits {
+  width: 40%;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  min-width: 200px;
+  position: relative;
+}
+
+#admin_alt #adm_search_container #adm_search_marques h3, #admin_alt #adm_search_container #adm_search_produits h3 {
+  font-family: "DotGothic16";
+  line-height: calc(20px + 1.2vw);
+  font-size: calc(20px + 1.2vw);
+  margin: 1% 0%;
+}
+
+#admin_alt #adm_search_container #adm_search_marques input, #admin_alt #adm_search_container #adm_search_produits input {
+  width: 80%;
+  line-height: calc(20px + 1.2vw);
+  font-size: calc(20px + 1.2vw);
+  font-family: "DotGothic16";
+}
+
+#admin_alt #adm_search_container #adm_search_marques button, #admin_alt #adm_search_container #adm_search_produits button {
+  font-size: calc(20px + 1.2vw);
+  line-height: calc(20px + 1.2vw);
+  background: none;
+  border: none;
+  color: #f05f00;
+}
+
+#admin_alt #adm_search_container #adm_search_marques button:hover, #admin_alt #adm_search_container #adm_search_produits button:hover {
+  color: #41aa32;
+  cursor: pointer;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
 #admin_alt #produits {
   width: 90%;
   position: relative;

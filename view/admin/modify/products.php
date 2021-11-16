@@ -1,4 +1,17 @@
 <main id="admin_alt">
+    <div id="adm_search_container">
+        <section id="adm_search_marques">
+            <h3>Rechercher une marque</h3>
+            <input type="text" name="adm_search" required>
+            <button type="submit"><i class="fas fa-search"></i></button>
+        </section>
+        <section id="adm_search_produits">
+            <h3>Rechercher un produit</h3>
+            <input type="text" name="adm_search" required>
+            <button type="submit"><i class="fas fa-search"></i></button>
+        </section>
+    </div>
+
     <div id="produits">
         <details id="marques_det">
             <summary>Afficher les marques</summary>

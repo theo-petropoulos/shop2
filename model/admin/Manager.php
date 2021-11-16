@@ -16,11 +16,11 @@ class Manager extends Database{
     public function fetchProducts(){
         $content = [];
         $stmt = self::$db->query(
-            'SELECT p.`id`, m.`nom` AS `nom_marque`, p.`nom` AS `nom_produit`, p.`description`, p.`stock`, p.`image_path`, p.`active` 
+            'SELECT p.`id`, m.`nom` AS `nom_marque`, m.`active`, p.`nom` AS `nom_produit`, p.`description`, p.`prix`, p.`stock`, p.`active` 
             FROM `produits` p 
             INNER JOIN `marques` m 
             ON m.`id` = p.`id_marque` 
-            ORDER BY `nom_marque`, `id`;'
+            ORDER BY m.`active` DESC, `nom_marque`, `id`;'
         );
         $content['produits'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $stmt = self::$db->query(

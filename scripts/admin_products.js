@@ -1,4 +1,7 @@
 $(function(){
+    /**
+     * Modify an item
+     */
     $(document).on('click', '.adm_modify_button', function(){
         let id_div = $(this).parent('div').attr('id').split('_')
         let value = $(this).prev('p').text()
@@ -14,11 +17,17 @@ $(function(){
         )
     })
 
+    /**
+     * Cancel the modification
+     */
     $(document).on('click', '.adm_modify_cancel', function(){
         let div = "#" + $(this).parents('div').first().attr('id')
         $(div).load(" " + div + " > *")
     })
 
+    /**
+     * Submit the modification
+     */
     $(document).on('click', '.adm_modify_submit', function(){
         let div = "#" + $(this).parents('div').first().attr('id')
         let id_div = $(this).parents('div').first().attr('id').split('_')
@@ -40,23 +49,31 @@ $(function(){
         })
     })
 
+    /**
+     * Pop-up a window to create an item
+     */
     $(document).on('click', '.add_btn', function(e){
         e.preventDefault()
         let item = $(this).next()
         item.css('visibility', 'visible')
     })
 
+    /**
+     * Close the pop-up
+     */
     $(document).on('click', '.close_form_btn', function(e){
         e.preventDefault()
         let item = $(this).parent()
         item.css('visibility', 'hidden')
     })
 
+    /**
+     * Submit the new item
+     */
     $(document).on('submit', '.add_form', function(e){
         e.preventDefault()
         var fd = new FormData()
-        let stringSer = $(this).serialize()
-        console.log(stringSer)
+        let stringSer = decodeURIComponent($(this).serialize())
         let arr = stringSer.split('&')
         let form_id = $(this).attr('id').split('_')
         let table = form_id[1]
@@ -66,7 +83,6 @@ $(function(){
             if(file.length > 0 )
                 fd.append('image',file[0])
         }
-        console.log(arr)
         $.each(arr, function(key, string){
             let elem = string.split('=')
             let item = elem[0]
@@ -83,17 +99,42 @@ $(function(){
             processData: false,
             contentType: false,
             success:function(res){
-                // location.reload()
+                location.reload()
             },
             error: function(jqXHR, textStatus, errorThrown){
             }
         })
-        // $.post(
-        //     '/shop/controller/data/JSHandler.php',
-        //     {obj},
-        //     (res)=>{
-        //         console.log(res)
-        //     }
-        // )
+    })
+
+    /**
+     * Delete an item
+     */
+    $(document).on('click', '.adm_delete_btn', function(){
+        let container = '#' + $(this).parents('details').first().attr('id')
+        let table = container.replace('#', '').replace('_det', '')
+        let id = $(this).parent().attr('id').replace(table + '_', '')
+        let authtoken = Cookies.get('ADMauthtoken')
+        if(table === 'marques'){
+            var i = 0
+            if(confirm('Attention : Supprimer une marque entrainera la suppression de tous les produits associés. Continuer ?')){
+                i = 1
+            }
+        }
+        if(typeof(i) == 'undefined' || i == 1){
+            $.post(
+                '/shop/controller/data/JSHandler.php',
+                {adm_delete:table, id, authtoken},
+                (res)=>{
+                    console.log(res)
+                }
+            )
+            .done(()=>{
+                $('details').each(function(){
+                    let id = '#' + $(this).attr('id')
+                    $(id).load(' ' + id + ' > *')
+                })
+                // $(container).attr('open', '');
+            })
+        }
     })
 })

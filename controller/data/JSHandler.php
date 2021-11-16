@@ -3,19 +3,25 @@ if(!empty($_POST['delete']) && in_array($_POST['delete'], ['address'])){
     $jshandler = new JSHandler($_POST);
     $jshandler->delete();
 }
-else if(!empty($_POST['adm_modify']) && in_array($_POST['adm_modify'], ['clients', 'marques', 'produits'])){
+elseif(!empty($_POST['adm_modify']) && in_array($_POST['adm_modify'], ['clients', 'marques', 'produits'])){
     $jshandler = new JSHandler($_POST);
     if($jshandler->authAdmin()){
         $jshandler->ADMmodify();
     }
     else echo 'unauthorized';
 }
-else if(!empty($_POST['adm_create']) && in_array($_POST['adm_create'], ['produits', 'marques']) ){
+elseif(!empty($_POST['adm_create']) && in_array($_POST['adm_create'], ['produits', 'marques']) ){
     $jshandler = new JSHandler($_POST, $_FILES);
     if($jshandler->authAdmin()){
         $jshandler->ADMcreate();
     }
     else echo 'unauthorized';
+}
+elseif(!empty($_POST['adm_delete']) && in_array($_POST['adm_delete'], ['produits', 'marques'])){
+    $jshandler = new JSHandler($_POST);
+    if($jshandler->authAdmin()){
+        $jshandler->ADMdelete();
+    }
 }
 
 class JSHandler{
@@ -116,6 +122,27 @@ class JSHandler{
             $query = 'INSERT INTO ' . $this->adm_create . '(' . $col_string . ') VALUES ( ' . $param_string . ')';
             $stmt = self::$db->prepare($query);
             $stmt->execute($values);
+        }
+    }
+
+    public function ADMdelete(){
+        if($this->adm_delete === 'produits'){
+            $stmt = self::$db->prepare(
+                "DELETE FROM $this->adm_delete 
+                WHERE `id` = ?;"
+            );
+            $stmt->execute([$this->id]);
+        }
+        elseif($this->adm_delete === 'marques'){
+            $stmt = self::$db->prepare(
+                "BEGIN;
+                DELETE FROM `produits` 
+                WHERE `id_marque` = ?;
+                DELETE FROM `marques` 
+                WHERE `id` = ?;
+                COMMIT;"
+            );
+            $stmt->execute([$this->id, $this->id]);
         }
     }
 }

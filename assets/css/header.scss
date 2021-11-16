@@ -11,24 +11,28 @@ $grey:rgb(45,45,45);
     border-bottom:1px solid $grey;
     min-height:15vh;
     height:max-content;
+    flex-wrap: wrap;
     #header_right{
         position:relative;
         min-width:max-content;
         width:70%;
         flex-grow: 1;
         display:flex;
+        flex-wrap: wrap;
         ul{
             display:flex;
             flex-direction: row;
             flex-grow: 1;
             justify-content: flex-end;
             align-items: flex-end;
+            flex-wrap: wrap;
             li{
                 list-style-type: none;
                 display:flex;
                 min-width:max-content;
                 position:relative;
                 margin:0% 2%;
+                min-width: 100px;
                 a{
                     font-family:$font;
                     text-decoration: none; 
@@ -36,6 +40,21 @@ $grey:rgb(45,45,45);
                     &:hover{
                         color:$orange;
                         transition:color 0.3s;
+                    }
+                }
+                &#search_bar_container{
+                    width:max-content;
+                    min-width: 200px;
+                    input{
+                        margin:0% calc(max(1%, 6px));
+                        border:1px solid black;
+                        border-radius: none;
+                        font-family: $font;
+                        outline: 0;
+                    }
+                    button{
+                        background:none;
+                        border:none;
                     }
                 }
             }
@@ -89,6 +108,22 @@ $grey:rgb(45,45,45);
                             background:black;
                             color:white;
                         }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width:499px){
+    #header_nav{
+        #header_right{
+            ul{
+                flex-direction: column;
+                align-items: center;
+                li{
+                    a{
+                        margin:0 auto;
                     }
                 }
             }

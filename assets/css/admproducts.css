@@ -78,6 +78,25 @@
       flex-wrap: wrap;
 }
 
+#admin_alt #produits details .div_det .adm_delete_btn {
+  color: red;
+  font-family: "DotGothic16";
+  border: none;
+  background: none;
+  font-size: calc(15px + 1vw);
+  width: calc(max(5%, 35px));
+  min-width: 25px;
+  border: 1px solid transparent;
+}
+
+#admin_alt #produits details .div_det .adm_delete_btn:hover {
+  cursor: pointer;
+  color: #f05f00;
+  border: 1px solid #f05f00;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
 #admin_alt #produits details .div_det:last-of-type {
   border-bottom: none;
 }

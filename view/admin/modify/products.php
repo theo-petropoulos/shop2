@@ -3,7 +3,8 @@
         <details id="marques_det">
             <summary>Afficher les marques</summary>
             <?php if(!empty($content) && !empty($content['marques'])) : foreach($content['marques'] as $key => $marque){?>
-                <div id="marque_<?=$marque['id'];?>" class="div_det">
+                <div id="marques_<?=$marque['id'];?>" class="div_det">
+                    <button class="adm_delete_btn">X</button>
                     <?php foreach($marque as $key => $value){
                         if($key !== 'id'){ ?>
                             <div id="<?=$marque['id'] . '_' . $key . '_marque';?>" class="<?=$key;?>">
@@ -20,7 +21,8 @@
         <details id="produits_det">
             <summary>Afficher les produits</summary>
             <?php if(!empty($content) && !empty($content['produits'])) : foreach($content['produits'] as $key => $produit){?>
-                <div id="produit_<?=$produit['id'];?>" class="div_det">
+                <div id="produits_<?=$produit['id'];?>" class="div_det">
+                    <button class="adm_delete_btn">X</button>
                     <?php foreach($produit as $key => $value){
                         if($key !== 'id'){ ?>
                             <div id="<?=$produit['id'] . '_' . $key . '_produit';?>" class="<?=$key;?>">

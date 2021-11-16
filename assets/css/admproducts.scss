@@ -51,6 +51,22 @@ $green:rgb(65, 170, 50);
                 border-bottom:1px solid black;
                 box-sizing: border-box;
                 flex-wrap: wrap;
+                .adm_delete_btn{
+                    color:red;
+                    font-family: $font;
+                    border:none;
+                    background:none;
+                    font-size: calc(15px + 1vw);
+                    width:calc(max(5%, 35px));
+                    min-width:25px;
+                    border:1px solid transparent;
+                    &:hover{
+                        cursor:pointer;
+                        color:$orange;
+                        border:1px solid $orange;
+                        transition:all 0.3s;
+                    }
+                }
                 &:last-of-type{
                     border-bottom: none;
                 }

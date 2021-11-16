@@ -11,6 +11,10 @@ ob_start();
         </div>
         <div id="header_right">
             <ul id="header_nav_ul">
+                <li id="search_bar_container">
+                    <input type="text" name="search" id="search_bar" autocomplete="off" required>
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </li>
                 <li>
                     <a href="produits/">NOS PRODUITS</a>
                 </li>

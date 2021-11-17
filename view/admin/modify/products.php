@@ -1,14 +1,10 @@
 <main id="admin_alt">
     <div id="adm_search_container">
         <section id="adm_search_marques">
-            <h3>Rechercher une marque</h3>
-            <input type="text" name="adm_search" required>
-            <button type="submit"><i class="fas fa-search"></i></button>
+            <button type="submit" class="trigger_adm_search">Rechercher une marque</button>
         </section>
         <section id="adm_search_produits">
-            <h3>Rechercher un produit</h3>
-            <input type="text" name="adm_search" required>
-            <button type="submit"><i class="fas fa-search"></i></button>
+            <button type="submit" class="trigger_adm_search">Rechercher un produit</button>
         </section>
     </div>
 
@@ -53,42 +49,66 @@
     <section id="add_produits_marques">
         <div id="add_marques" class="add_container">
             <button id="add_marques_btn" class="add_btn">+ Ajouter une marque</button>
-            <form enctype="multipart/form-data" method="post" action="" id="add_marques_form" class="add_form">
-                <button class="close_form_btn">X</button>
-                <h3>Nouvelle marque</h3>
-                <label for="nom">Nom :</label>
-                <input type="text" name="nom" required>
-                <label for="description">Description :</label>
-                <textarea id="description_area" name="description" required></textarea>
-                <input type="submit" name="Ajouter">
-            </form>
+            <div id="add_marques_form_container" class="add_form_container">
+                <form enctype="multipart/form-data" method="post" action="" id="add_marques_form" class="add_form">
+                    <button class="close_form_btn">X</button>
+                    <h3>Nouvelle marque</h3>
+                    <label for="nom">Nom :</label>
+                    <input type="text" name="nom" required>
+                    <label for="description">Description :</label>
+                    <textarea id="description_area" name="description" required></textarea>
+                    <input type="submit" name="Ajouter">
+                </form>
+            </div>
         </div>
         <div id="add_produits" class="add_container">
             <button id="add_produits_btn" class="add_btn">+ Ajouter un produit</button>
-            <form enctype="multipart/form-data" method="post" action="" id="add_produits_form" class="add_form">
-                <button class="close_form_btn">X</button>
-                <h3>Nouveau produit</h3>
-                <input type="file" name="image" id="image_form" accept="image/*" required>
-                <label for="marque">Marque:</label>
-                <select name="id_marque">
-                    <?php foreach($content['marques'] as $key => $marque){ ?>
-                        <option value="<?=$marque['id'];?>"><?=$marque['nom'];?></option>
-                    <?php } ?>
-                </select>
-                <label for="nom">Nom :</label>
-                <input type="text" name="nom" required>
-                <label for="description">Description :</label>
-                <textarea id="description_area" name="description" required></textarea>
-                <label for="prix">Prix :</label>
-                <input type="number" step="0.01" name="prix" required>
-                <label for="stock">Stock :</label>
-                <input type="number" name="stock" required>
-                <span>
-                    <label for="active">Activer ?</label>
-                    <input type="checkbox" name="active">
-                </span>
-                <input type="submit" name="Ajouter">
-            </form>
+            <div id="add_produits_form_container" class="add_form_container">
+                <form enctype="multipart/form-data" method="post" action="" id="add_produits_form" class="add_form">
+                    <button class="close_form_btn">X</button>
+                    <h3>Nouveau produit</h3>
+                    <input type="file" name="image" id="image_form" accept="image/*" required>
+                    <label for="marque">Marque:</label>
+                    <select name="id_marque">
+                        <?php foreach($content['marques'] as $key => $marque){ ?>
+                            <option value="<?=$marque['id'];?>"><?=$marque['nom'];?></option>
+                        <?php } ?>
+                    </select>
+                    <label for="nom">Nom :</label>
+                    <input type="text" name="nom" required>
+                    <label for="description">Description :</label>
+                    <textarea id="description_area" name="description" required></textarea>
+                    <label for="prix">Prix :</label>
+                    <input type="number" step="0.01" name="prix" required>
+                    <label for="stock">Stock :</label>
+                    <input type="number" name="stock" required>
+                    <span>
+                        <label for="active">Activer ?</label>
+                        <input type="checkbox" name="active">
+                    </span>
+                    <input type="submit" name="Ajouter">
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section id="search_marques_container" class="search_item_container">
+        <div id="search_marques_box" class="search_item_box">
+            <button id="search_marques_close_btn" class="search_close_btn"><i class="fas fa-chevron-down"></i></button>
+            <input type="text" name="adm_search" class="adm_search_input" id="adm_search_input_marques"> 
+            <div class="search_results_box" id="search_results_marques">
+                
+            </div>
+        </div>
+    </section>
+
+    <section id="search_produits_container" class="search_item_container">
+        <div id="search_produits_box" class="search_item_box">
+            <button id="search_produits_close_btn" class="search_close_btn"><i class="fas fa-chevron-down"></i></button>
+            <input type="text" name="adm_search" class="adm_search_input" id="adm_search_input_produits">
+            <div class="search_results_box" id="search_results_produits">
+
+            </div>
         </div>
     </section>
 

@@ -62,6 +62,7 @@ class AdminCTRL{
                         break;
                     case 'products':
                         echo "<script src='" . SCRIPTS . "admin_products.js'></script>";
+                        echo "<script src='" . SCRIPTS . "admin_search_bar.js'></script>";
                         require MODEL . 'admin/Manager.php';
                         $manager = new Manager();
                         $content = $manager->fetchProducts();

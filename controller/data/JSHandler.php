@@ -23,6 +23,12 @@ elseif(!empty($_POST['adm_delete']) && in_array($_POST['adm_delete'], ['produits
         $jshandler->ADMdelete();
     }
 }
+elseif(!empty($_POST['adm_search'])){
+    $jshandler = new JSHandler($_POST);
+    if($jshandler->authAdmin()){
+        $jshandler->ADMsearch();
+    }
+}
 
 class JSHandler{
     protected static $db;
@@ -165,6 +171,39 @@ class JSHandler{
                 COMMIT;"
             );
             $stmt->execute([$this->id, $this->id]);
+        }
+    }
+
+    public function ADMsearch(){
+        switch($this->table){
+            case 'produits':
+                $search = "'" . $this->adm_search . "%'";
+                $stmt = self::$db->query(
+                    "SELECT DISTINCT p.`id`, m.`nom` AS `nom_marque`, p.`nom` AS `nom_produit`, p.`description`, p.`prix`, p.`stock`, p.`active` 
+                    FROM `produits` p 
+                    INNER JOIN `marques` m 
+                    ON m.`id` = p.`id_marque` 
+                    WHERE ( m.`nom` LIKE $search ) OR ( p.`nom` LIKE $search ) 
+                    ORDER BY `nom_produit`, `nom_marque`;"
+                );
+                // $stmt->execute([$search, $search]);
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                echo json_encode($results);
+                break;
+            case 'marques':
+                $search = "'" . $this->adm_search . "%'";
+                $stmt = self::$db->prepare(
+                    "SELECT `id`, `nom`, `description`, `active`  
+                    FROM `marques` WHERE `nom` LIKE ?
+                    ORDER BY `nom` ASC;"
+                );
+                $stmt->execute([$search, $search]);
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                echo json_encode($results);
+                break;
+            default:
+                echo "ERR_SEARCH";
+                break;
         }
     }
 }

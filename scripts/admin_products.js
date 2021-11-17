@@ -63,7 +63,7 @@ $(function(){
      */
     $(document).on('click', '.close_form_btn', function(e){
         e.preventDefault()
-        let item = $(this).parent()
+        let item = $(this).parents('.add_form_container')
         item.css('visibility', 'hidden')
     })
 

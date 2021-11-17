@@ -41,20 +41,12 @@
           flex-grow: 1;
   min-width: 200px;
   position: relative;
-}
-
-#admin_alt #adm_search_container #adm_search_marques h3, #admin_alt #adm_search_container #adm_search_produits h3 {
-  font-family: "DotGothic16";
-  line-height: calc(20px + 1.2vw);
-  font-size: calc(20px + 1.2vw);
-  margin: 1% 0%;
-}
-
-#admin_alt #adm_search_container #adm_search_marques input, #admin_alt #adm_search_container #adm_search_produits input {
-  width: 80%;
-  line-height: calc(20px + 1.2vw);
-  font-size: calc(20px + 1.2vw);
-  font-family: "DotGothic16";
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
 #admin_alt #adm_search_container #adm_search_marques button, #admin_alt #adm_search_container #adm_search_produits button {
@@ -63,6 +55,7 @@
   background: none;
   border: none;
   color: #f05f00;
+  font-family: "DotGothic16";
 }
 
 #admin_alt #adm_search_container #adm_search_marques button:hover, #admin_alt #adm_search_container #adm_search_produits button:hover {
@@ -265,16 +258,85 @@
   transition: all 0.3s;
 }
 
-.add_form {
+#admin_alt .search_item_container {
+  height: 100vh;
+  width: 100%;
   position: fixed;
-  top: 50%;
-  left: 50%;
+  top: 0%;
+  background: rgba(136, 136, 136, 0.8);
+  z-index: 7;
+  visibility: hidden;
+  left: 0;
+}
+
+#admin_alt .search_item_container .search_item_box {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  bottom: -100%;
+  background: white;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#admin_alt .search_item_container .search_item_box button {
+  background: white;
+  border: none;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  font-size: calc(18px + 1vw);
+  color: #195af0;
+}
+
+#admin_alt .search_item_container .search_item_box button:hover {
+  cursor: pointer;
+  color: #5abeff;
+  -webkit-transition: color 0.3s;
+  transition: color 0.3s;
+}
+
+#admin_alt .search_item_container .search_item_box input {
+  width: 80%;
+  line-height: calc(20px + 1.5vw);
+  font-size: calc(22px + 1.6vw);
+  font-family: "DotGothic16";
+  text-align: center;
+}
+
+.add_form_container {
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  height: 100vh;
+  width: 100vw;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background: rgba(136, 136, 136, 0.8);
+  z-index: 7;
+  visibility: hidden;
+}
+
+.add_form_container .add_form {
+  position: relative;
   background: white;
   border: 1px solid black;
   font-family: "DotGothic16";
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
-  z-index: 7;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -287,15 +349,14 @@
   height: -moz-max-content;
   height: max-content;
   text-align: center;
-  visibility: hidden;
   min-width: 50%;
 }
 
-.add_form input {
+.add_form_container .add_form input {
   margin: calc(max(1%, 8px));
 }
 
-.add_form input[type=submit] {
+.add_form_container .add_form input[type=submit] {
   font-family: "DotGothic16";
   outline: 0;
   border-radius: none;
@@ -303,11 +364,11 @@
   padding: 2% 0%;
 }
 
-.add_form input[type=submit]:hover {
+.add_form_container .add_form input[type=submit]:hover {
   cursor: pointer;
 }
 
-.add_form .close_form_btn {
+.add_form_container .add_form .close_form_btn {
   color: red;
   outline: 0;
   border: none;
@@ -319,7 +380,7 @@
   font-size: calc(10px + 0.7vw);
 }
 
-.add_form .close_form_btn:hover {
+.add_form_container .add_form .close_form_btn:hover {
   cursor: pointer;
 }
 /*# sourceMappingURL=admproducts.css.map */

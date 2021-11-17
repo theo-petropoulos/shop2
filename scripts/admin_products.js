@@ -1,12 +1,18 @@
+window.is_search = null
+window.item = null
+window.id = null
+
 $(function(){
     /**
      * Modify an item
      */
     $(document).on('click', '.adm_modify_button', function(){
+        if($(this).parents('.search_results_box').length) is_search = 1
         let id_div = $(this).parent('div').attr('id').split('_')
         let value = $(this).prev('p').text()
-        let id = id_div[0]
-        let item = id_div[1]
+        id = id_div[0]
+        item = id_div[1]
+        console.log(item, id)
         window['prevHTML_' + item + '_' + id] = $(this).parents('div').html()
         $(this).parent('div').html(
             '<input type="text" name="' + item + '" value="' + value + '" required>\
@@ -21,8 +27,13 @@ $(function(){
      * Cancel the modification
      */
     $(document).on('click', '.adm_modify_cancel', function(){
-        let div = "#" + $(this).parents('div').first().attr('id')
-        $(div).load(" " + div + " > *")
+        if(is_search){
+            $(this).parents('div').first().html(window['prevHTML_' + item + '_' + id])
+        }
+        else{
+            let div = "#" + $(this).parents('div').first().attr('id')
+            $(div).load(" " + div + " > *")
+        }
     })
 
     /**
@@ -33,10 +44,11 @@ $(function(){
         let id_div = $(this).parents('div').first().attr('id').split('_')
         let id = id_div[0]
         let item = id_div[1]
-        let value = $(this).parents('div').find('input').val()
+        let value = $(this).parents('div').first().find('input').val()
         let authtoken = Cookies.get('ADMauthtoken')
-        let table = $(this).parents('details').first().attr('id').replace('_det', '')
-        console.log(div)
+        let table = $(this).parents('details').first().length ? 
+            $(this).parents('details').first().attr('id').replace('_det', '') : 
+            $(this).parents('div').first().attr('id').split('_')[2]
         $.post(
             '/shop/controller/data/JSHandler.php',
             {adm_modify:table, authtoken, id, item, value},
@@ -45,7 +57,14 @@ $(function(){
             }
         )
         .done(()=>{
-            $(div).load(" " + div + " > *")
+            if(is_search){
+                let parent = $(this).parents('div').first()
+                $(this).parents('div').first().html(window['prevHTML_' + item + '_' + id])
+                parent.find('p').html(value)
+            }
+            else{
+                $(div).load(" " + div + " > *")
+            }
         })
     })
 
@@ -110,9 +129,17 @@ $(function(){
      * Delete an item
      */
     $(document).on('click', '.adm_delete_btn', function(){
-        let container = '#' + $(this).parents('details').first().attr('id')
-        let table = container.replace('#', '').replace('_det', '')
-        let id = $(this).parent().attr('id').replace(table + '_', '')
+        if($(this).parents('details').length){
+            var container = '#' + $(this).parents('details').first().attr('id')
+            var table = container.replace('#', '').replace('_det', '')
+            var id = $(this).parent().attr('id').replace(table + '_', '')
+        }
+        else{
+            var container = '#' + $(this).parents('div').first().attr('id')
+            var table = container.split('_')[0].replace('#', '')
+            var id = container.split('_')[1]
+            var search = 1
+        }    
         let authtoken = Cookies.get('ADMauthtoken')
         if(table === 'marques'){
             var i = 0
@@ -133,7 +160,9 @@ $(function(){
                     let id = '#' + $(this).attr('id')
                     $(id).load(' ' + id + ' > *')
                 })
-                // $(container).attr('open', '');
+                if(typeof(search) !== 'undefined'){
+                    $(this).parents('.div_det').first().remove()
+                }
             })
         }
     })

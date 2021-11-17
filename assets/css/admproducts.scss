@@ -80,6 +80,7 @@ $green:rgb(65, 170, 50);
                 border-bottom:1px solid black;
                 box-sizing: border-box;
                 flex-wrap: wrap;
+                font-family: $font;
                 .adm_delete_btn{
                     color:red;
                     font-family: $font;
@@ -186,13 +187,14 @@ $green:rgb(65, 170, 50);
         left:0;
         .search_item_box{
             position: absolute;
-            height:100%;
+            height:80%;
             width:100%;
             bottom:-100%;
             background:white;
             display:flex;
             flex-direction: column;
             align-items: center;
+            z-index:8;
             button{
                 background:white;
                 border:none;
@@ -211,6 +213,97 @@ $green:rgb(65, 170, 50);
                 font-size: calc(22px + 1.6vw);
                 font-family: $font;
                 text-align: center;
+            }
+        }
+        .search_results_box{
+            overflow-y: auto;
+            height:auto;
+            scrollbar-color: $orange #e0e0e0;
+            scrollbar-width: thin;
+            padding:2%;
+            width:100%;
+            .div_det{
+                display:flex;
+                width:100%;
+                position:relative;
+                flex-direction: row;
+                justify-content: space-between;
+                margin:calc(max(1%, 15px)) 0%;
+                padding:1%;
+                border-bottom:1px solid black;
+                box-sizing: border-box;
+                flex-wrap: wrap;
+                font-family: $font;
+                .adm_delete_btn{
+                    color:red;
+                    font-family: $font;
+                    border:none;
+                    background:none;
+                    font-size: calc(15px + 1vw);
+                    width:calc(max(5%, 35px));
+                    min-width:25px;
+                    border:1px solid transparent;
+                    &:hover{
+                        cursor:pointer;
+                        color:$orange;
+                        border:1px solid $orange;
+                        transition:all 0.3s;
+                    }
+                }
+                &:last-of-type{
+                    border-bottom: none;
+                }
+                div{
+                    width:20%;
+                    min-width: 100px;
+                    flex-grow: 1;
+                    display:flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    text-align: center;
+                    &.active, &.stock, &.prix{
+                        width:10%;
+                        min-width:50px;
+                    }
+                    &.nom, &.nom_marque, &.nom_produit{
+                        width:15%;
+                        min-width:120px;
+                    }
+                    button{
+                        outline:0;
+                        border:1px solid black;
+                        padding:2px 5px;
+                        border-radius: none;
+                        font-family: $font;
+                        background:$yellow;
+                        color:black;
+                        width:max-content;
+                        align-self: center;
+                        font-size: initial;
+                        &:hover{
+                            cursor:pointer;
+                            background:$green;
+                            transition:all 0.3s;
+                        }
+                    }
+                    p{
+                        display: -webkit-box;
+                        -webkit-line-clamp: 2;
+                        -webkit-box-orient: vertical;  
+                        overflow: hidden;
+                    }
+                }
+                a{
+                    width:30%;
+                    flex-grow: 1;
+                    text-decoration: none;
+                    color:$blue;
+                    text-align: center;
+                    &:hover{
+                        color:$blue_light;
+                        transition: all 0.3s;
+                    }
+                }
             }
         }
     }

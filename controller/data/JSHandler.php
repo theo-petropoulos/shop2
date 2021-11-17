@@ -175,29 +175,29 @@ class JSHandler{
     }
 
     public function ADMsearch(){
+        $search = "% $this->adm_search%";
+        $search2 = "$this->adm_search%";
         switch($this->table){
             case 'produits':
-                $search = "'" . $this->adm_search . "%'";
-                $stmt = self::$db->query(
+                $stmt = self::$db->prepare(
                     "SELECT DISTINCT p.`id`, m.`nom` AS `nom_marque`, p.`nom` AS `nom_produit`, p.`description`, p.`prix`, p.`stock`, p.`active` 
                     FROM `produits` p 
                     INNER JOIN `marques` m 
                     ON m.`id` = p.`id_marque` 
-                    WHERE ( m.`nom` LIKE $search ) OR ( p.`nom` LIKE $search ) 
+                    WHERE ( m.`nom` LIKE ?) OR ( m.`nom` LIKE ?) OR ( p.`nom` LIKE ? ) OR ( p.`nom` LIKE ? )
                     ORDER BY `nom_produit`, `nom_marque`;"
                 );
-                // $stmt->execute([$search, $search]);
+                $stmt->execute([$search2, $search, $search2, $search]);
                 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 echo json_encode($results);
                 break;
             case 'marques':
-                $search = "'" . $this->adm_search . "%'";
                 $stmt = self::$db->prepare(
                     "SELECT `id`, `nom`, `description`, `active`  
-                    FROM `marques` WHERE `nom` LIKE ?
+                    FROM `marques` WHERE `nom` LIKE ? OR `nom` LIKE ?
                     ORDER BY `nom` ASC;"
                 );
-                $stmt->execute([$search, $search]);
+                $stmt->execute([$search, $search2]);
                 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 echo json_encode($results);
                 break;

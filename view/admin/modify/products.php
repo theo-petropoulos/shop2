@@ -16,7 +16,7 @@
                     <button class="adm_delete_btn">X</button>
                     <?php foreach($marque as $key => $value){
                         if($key !== 'id'){ ?>
-                            <div id="<?=$marque['id'] . '_' . $key . '_marque';?>" class="<?=$key;?>">
+                            <div id="<?=$marque['id'] . '_' . $key . '_marques';?>" class="<?=$key;?>">
                                 <p><?=$value != '' ? $value : '0'?></p>
                                 <button class="adm_modify_button">Modifier</button>
                             </div>
@@ -34,7 +34,7 @@
                     <button class="adm_delete_btn">X</button>
                     <?php foreach($produit as $key => $value){
                         if($key !== 'id'){ ?>
-                            <div id="<?=$produit['id'] . '_' . $key . '_produit';?>" class="<?=$key;?>">
+                            <div id="<?=$produit['id'] . '_' . $key . '_produits';?>" class="<?=$key;?>">
                                 <h4><?=ucfirst($key);?></h4>
                                 <p><?=$value != '' ? $value : '0'?></p>
                                 <button class="adm_modify_button">Modifier</button>

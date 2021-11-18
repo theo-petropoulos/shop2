@@ -10,7 +10,7 @@ class Admin extends Database{
     
     public function login(){
         $stmt = self::$db->prepare(
-            'SELECT `password` FROM `admin` WHERE `login` = ?;'
+            'SELECT `password` FROM `admins` WHERE `login` = ?;'
         );
         $stmt->execute([$this->login]);
         if($result = $stmt->fetch(PDO::FETCH_ASSOC)){
@@ -43,7 +43,7 @@ class Admin extends Database{
                 $key2 = base64_encode($key2);
 
                 $stmt = self::$db->prepare(
-                    'UPDATE `admin` SET `iv` = ?, `key` = ?, `iv_time` = ?, `key_time` = ? WHERE `login` = ?;'
+                    'UPDATE `admins` SET `iv` = ?, `key` = ?, `iv_time` = ?, `key_time` = ? WHERE `login` = ?;'
                 );
                 $stmt->execute([$iv1, $key1, $iv2, $key2, $this->login]);
                 if($stmt->rowCount()){
@@ -61,7 +61,7 @@ class Admin extends Database{
     
     function confirmLogin(){
         $stmt = self::$db->prepare(
-            "SELECT `iv`, `key`, `iv_time`, `key_time` FROM `admin` WHERE `login` = ?"
+            "SELECT `iv`, `key`, `iv_time`, `key_time` FROM `admins` WHERE `login` = ?"
         );
         $stmt->execute([$this->o]);
         if($keychain = $stmt->fetch(PDO::FETCH_ASSOC)){
@@ -83,14 +83,14 @@ class Admin extends Database{
             if($login === $this->o){
                 if(time() - $time <= 300){
                     $stmt = self::$db->prepare(
-                        "UPDATE `admin` SET `key` = NULL, `iv` = NULL, `iv_time` = NULL, `key_time` = NULL WHERE `login` = ?;"
+                        "UPDATE `admins` SET `key` = NULL, `iv` = NULL, `iv_time` = NULL, `key_time` = NULL WHERE `login` = ?;"
                     );
                     $stmt->execute([$login]);
                     if($stmt->rowCount()){
                         $session = new Session();
                         $this->authtoken = $session->giveCookie('ADMauthtoken');
                         $stmt = self::$db->prepare(
-                            'UPDATE `admin` 
+                            'UPDATE `admins` 
                             SET `authtoken` = ? 
                             WHERE `login` = ?'
                         );
@@ -112,7 +112,7 @@ class Admin extends Database{
             if($this->password === $this->cpassword){
                 if(self::verifyPwd($this->password)){
                     $stmt = self::$db->prepare(
-                        'UPDATE `admin` 
+                        'UPDATE `admins` 
                         SET `password` = ? 
                         WHERE `authtoken` = ?'
                     );

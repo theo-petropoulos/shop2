@@ -12,7 +12,6 @@ $(function(){
         let value = $(this).prev('p').text()
         id = id_div[0]
         item = id_div[1]
-        console.log(item, id)
         window['prevHTML_' + item + '_' + id] = $(this).parents('div').html()
         $(this).parent('div').html(
             '<input type="text" name="' + item + '" value="' + value + '" required>\
@@ -53,7 +52,7 @@ $(function(){
             '/shop/controller/data/JSHandler.php',
             {adm_modify:table, authtoken, id, item, value},
             (res)=>{
-                console.log(res)
+                // console.log(res)
             }
         )
         .done(()=>{
@@ -106,7 +105,6 @@ $(function(){
             let elem = string.split('=')
             let item = elem[0]
             let value = elem[1]
-            console.log(item, value)
             fd.append(item, value)
         })
         fd.append('adm_create', table)
@@ -152,7 +150,7 @@ $(function(){
                 '/shop/controller/data/JSHandler.php',
                 {adm_delete:table, id, authtoken},
                 (res)=>{
-                    console.log(res)
+                    // console.log(res)
                 }
             )
             .done(()=>{

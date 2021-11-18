@@ -68,7 +68,7 @@ class Session extends Database{
         if(!empty($_COOKIE['ADMauthtoken'])){
             $this->ADMauthtoken = $_COOKIE['ADMauthtoken'];
             $stmt = self::$db->prepare(
-                "SELECT `id` FROM `admin` WHERE `authtoken` = ?;"
+                "SELECT `id` FROM `admins` WHERE `authtoken` = ?;"
             );
             $stmt->execute([$this->ADMauthtoken]);
             $result = $stmt->fetch(PDO::FETCH_ASSOC);

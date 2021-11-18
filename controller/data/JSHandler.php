@@ -29,6 +29,18 @@ elseif(!empty($_POST['adm_search'])){
         $jshandler->ADMsearch();
     }
 }
+elseif(!empty($_POST['adm_create_adm']) && $_POST['adm_create_adm'] == 1){
+    $jshandler = new JSHandler($_POST);
+    if($jshandler->authAdmin()){
+        $jshandler->ADMcreateADM();
+    }
+}
+elseif(!empty($_POST['adm_delete_adm']) && $_POST['adm_delete_adm'] == 1){
+    $jshandler = new JSHandler($_POST);
+    if($jshandler->authAdmin()){
+        $jshandler->ADMdeleteADM();
+    }
+}
 
 class JSHandler{
     protected static $db;
@@ -64,7 +76,7 @@ class JSHandler{
 
     public function authAdmin(){
         $stmt = self::$db->prepare(
-            "SELECT `id` FROM `admin` WHERE `authtoken` = ?;"
+            "SELECT `id` FROM `admins` WHERE `authtoken` = ?;"
         );
         $stmt->execute([$this->authtoken]);
         if($stmt->fetch(PDO::FETCH_ASSOC)) return 1;
@@ -184,7 +196,7 @@ class JSHandler{
                     FROM `produits` p 
                     INNER JOIN `marques` m 
                     ON m.`id` = p.`id_marque` 
-                    WHERE ( m.`nom` LIKE ?) OR ( m.`nom` LIKE ?) OR ( p.`nom` LIKE ? ) OR ( p.`nom` LIKE ? )
+                    WHERE ( m.`nom` LIKE ? ) OR ( m.`nom` LIKE ? ) OR ( p.`nom` LIKE ? ) OR ( p.`nom` LIKE ? )
                     ORDER BY `nom_produit`, `nom_marque`;"
                 );
                 $stmt->execute([$search2, $search, $search2, $search]);
@@ -204,6 +216,72 @@ class JSHandler{
             default:
                 echo "ERR_SEARCH";
                 break;
+        }
+    }
+
+    public function ADMcreateADM(){
+        if($this->password === $this->cpassword){
+           if( !preg_match('@[A-Z]@', $this->password) || !preg_match('@[a-z]@', $this->password) ||
+			!preg_match('@[0-9]@', $this->password) || !preg_match('@[^\w]@', $this->password) ||
+			strlen($this->password)<8 ){
+                echo "ERR_PWD_STRG";
+				return 0;
+			}
+            else{
+                $stmt = self::$db->prepare(
+                    "SELECT `login` FROM `admins` WHERE `login` = ?;"
+                );
+                $stmt->execute([$this->login]);
+                if(!empty($stmt->fetch(PDO::FETCH_ASSOC))){
+                    echo "ERR_LOG_EXST";
+                    return 0;
+                }
+                else{
+                    $stmt = self::$db->prepare(
+                        'INSERT INTO `admins` ( `login`, `password` ) 
+                        VALUES ( ?, ? );'
+                    );
+                    $stmt->execute([$this->login, password_hash($this->password, PASSWORD_DEFAULT)]);
+                }
+                if($stmt->rowCount()){
+                    echo "SUCCESS";
+                    return 0;
+                }
+                else{
+                    echo "ERR_SQL_INSR";
+                    return 0;
+                }
+            }
+        }
+        else{
+            echo "ERR_PWD_MATCH";
+            return 0;
+        }
+    }
+
+    public function ADMdeleteADM(){
+        $stmt = self::$db->prepare(
+            'SELECT `login` FROM `admins` WHERE `authtoken` = ?;'
+        );
+        $stmt->execute([$this->authtoken]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        if($result['login'] === $this->login){
+            echo "ERR_IS_ADM";
+            return 0;
+        }
+        else{
+            $stmt = self::$db->prepare(
+                'DELETE FROM `admins` WHERE `login` = ?;'
+            );
+            $stmt->execute([$this->login]);
+            if($stmt->rowCount()){
+                echo "SUCCESS";
+                return 0;
+            }
+            else{
+                echo "ERR_SQL_DEL";
+                return 0;
+            }
         }
     }
 }

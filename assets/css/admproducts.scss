@@ -65,6 +65,7 @@ $green:rgb(65, 170, 50);
             margin:calc(max(1%,15px)) 0%;
             box-sizing: border-box;
             summary{
+                font-size: calc(18px + 1vw);
                 &:hover{
                     cursor:pointer;
                 }

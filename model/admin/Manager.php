@@ -31,4 +31,11 @@ class Manager extends Database{
         $content['marques'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $content;
     }
+
+    public function fetchAdmins(){
+        $stmt = self::$db->query(
+            'SELECT `login` FROM `admins`;'
+        );
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

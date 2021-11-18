@@ -33,7 +33,7 @@ $f3->route('GET /admin',
                 $session->disconnect('ADMauthtoken');
                 $f3->reroute('/');
             }
-            elseif(!empty($_GET['modify']) && in_array($_GET['modify'], ['password', 'clients', 'products']))
+            elseif(!empty($_GET['modify']) && in_array($_GET['modify'], ['password', 'clients', 'products', 'admins']))
                 $f3->set('action', 'modify');
             else
                 $f3->set('action', 'admin_landing');

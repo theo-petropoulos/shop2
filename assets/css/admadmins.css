@@ -1,0 +1,81 @@
+#admin_alt #admins_list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  width: 90%;
+  padding: 2%;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  font-family: "DotGothic16";
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+
+#admin_alt #admins_list .admin_resume {
+  padding: 2%;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  border: 1px solid black;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  text-align: center;
+  position: relative;
+  width: 20%;
+  min-width: 150px;
+  margin: 2%;
+}
+
+#admin_alt #admins_list .admin_resume .del_admin_btn {
+  position: absolute;
+  top: 5%;
+  right: 5%;
+  color: red;
+  background: transparent;
+  border: none;
+  font-size: calc(14px + 0.8vw);
+}
+
+#admin_alt #admins_list .admin_resume .del_admin_btn:hover {
+  cursor: pointer;
+}
+
+#admin_alt #admins_list .admin_resume h3 {
+  border-bottom: 1px solid black;
+}
+
+#admin_alt #add_admins_form_container #add_admins button#add_admin_btn {
+  font-family: "DotGothic16";
+  padding: 1% 2%;
+  background: #f0b000;
+  border: 1px solid black;
+}
+
+#admin_alt #add_admins_form_container #add_admins button#add_admin_btn:hover {
+  cursor: pointer;
+  background: #ffd151;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+#admin_alt #add_admins_form_container #add_admins #add_admins_form_container form input {
+  font-family: "DotGothic16";
+}
+
+#admin_alt #admins_response {
+  margin: 2%;
+  height: 5%;
+  font-family: "DotGothic16";
+}
+/*# sourceMappingURL=admadmins.css.map */

@@ -22,7 +22,7 @@
                             </div>
                         <?php } 
                     } ?>
-                    <a href="admin?modify=marques&show_products=1">Afficher les produits</a>
+                    <a href="admin_marques_show_products" id="<?=$marque['nom'];?>_link">Afficher les produits</a>
                 </div>
             <?php } endif; ?>
         </details>

@@ -37,7 +37,7 @@ $(function(){
                     '/shop/controller/data/JSHandler.php',
                     {adm_search, table, authtoken},
                     (res)=>{
-                        // console.log(res)
+                        console.log(res)
                     })
                 .done(function(data, status){
                 try{
@@ -77,24 +77,17 @@ $(function(){
                     clog('not sent')
                 })
             }
-        },
-        // 'blur':function(){
-        //     selector=0;
-        //     $(document).off('click').on('click', function(e){
-        //         if($(e.target).attr('id')!==$("#search_input").attr('id')) $("#results_box").empty();
-        //         if($(e.target).is('.searchp, .searchp span')){
-        //             $(e.target).is('span') ? 
-        //                 $("#search_input").val($("#search_input").val() + $(e.target).html()) :
-        //                     $("#search_input").val($("#search_input").val() + $(e.target).find('span').html())
-        //         }
-        //     });
-        //     $("#search_input").css({
-        //         "border-bottom-right-radius":"8px",
-        //         "border-bottom-left-radius":"8px"
-        //     });
-        // },
-        'focus':function(){
-            if(search!==undefined) $("#search_input").trigger('keyup');
         }
     }, ".adm_search_input")
+
+    /**
+     * Auto show products by brand
+     */
+    $(document).on('click', 'a[href="admin_marques_show_products"]', function(e){
+        e.preventDefault()
+        let marque = $(this).attr('id').replace('_link', '')
+        $('#adm_search_produits .trigger_adm_search').trigger('click')
+        $('#adm_search_input_produits').val(marque)
+        $('#adm_search_input_produits').trigger('keyup')
+    })
 })

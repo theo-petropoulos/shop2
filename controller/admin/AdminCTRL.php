@@ -68,6 +68,13 @@ class AdminCTRL{
                         $content = $manager->fetchProducts();
                         require VIEW . 'admin/modify/products.php';
                         break;
+                    case 'admins':
+                        echo "<script src ='" . SCRIPTS . "admin_admins.js'></script>";
+                        require MODEL . 'admin/Manager.php';
+                        $manager = new Manager();
+                        $admins = $manager->fetchAdmins();
+                        require VIEW . 'admin/modify/admins.php';
+                        break;
                     default:
                         $error = ['origin' => 'admin_modify', 'message' => 'Une erreur inattendue est survenue. Si le problème persiste, 
                         veuillez contacter l\'assistance technique à <a href="mailto:assistance@shop.com">assistance@shop.com</a>.

@@ -98,6 +98,10 @@
           box-sizing: border-box;
 }
 
+#admin_alt #produits details summary {
+  font-size: calc(18px + 1vw);
+}
+
 #admin_alt #produits details summary:hover {
   cursor: pointer;
 }

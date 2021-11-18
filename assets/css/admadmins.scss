@@ -1,0 +1,76 @@
+$font:'DotGothic16';
+$orange:rgb(240, 95, 0);
+$orange_light:rgb(240, 176, 0);
+$grey:rgb(45,45,45);
+$grey_light:rgb(109, 109, 109);
+$blue: rgb(25, 90, 240);
+$blue_light: rgb(90, 190, 255);
+$yellow:rgb(255, 209, 81);
+$green:rgb(65, 170, 50);
+
+#admin_alt{
+    #admins_list{
+        display:flex;
+        flex-direction: row;
+        width:90%;
+        padding:2%;
+        box-sizing: border-box;
+        font-family: $font;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        .admin_resume{
+            padding:2%;
+            box-sizing: border-box;
+            border:1px solid black;
+            display:flex;
+            flex-direction: column;
+            text-align: center;
+            position:relative;
+            width:20%;
+            min-width: 150px;
+            margin:2%;
+            .del_admin_btn{
+                position:absolute;
+                top:5%;
+                right:5%;
+                color:red;
+                background:transparent;
+                border:none;
+                font-size: calc(14px + 0.8vw);
+                &:hover{
+                    cursor:pointer;
+                }
+            }
+            h3{
+                border-bottom: 1px solid black;
+            }
+        }
+    }
+    #add_admins_form_container{
+        #add_admins{
+            button#add_admin_btn{
+                font-family: $font;
+                padding:1% 2%;
+                background:$orange_light;
+                border:1px solid black;
+                &:hover{
+                    cursor:pointer;
+                    background:$yellow;
+                    transition:all 0.3s;
+                }
+            }
+            #add_admins_form_container{
+                form{
+                    input{
+                        font-family: $font;
+                    }
+                }
+            }
+        }
+    }
+    #admins_response{
+        margin:2%;
+        height:5%;
+        font-family: $font;
+    }
+}

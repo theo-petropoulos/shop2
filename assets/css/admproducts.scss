@@ -65,7 +65,7 @@ $green:rgb(65, 170, 50);
             margin:calc(max(1%,15px)) 0%;
             box-sizing: border-box;
             summary{
-                font-size: calc(18px + 1vw);
+                font-size: calc(16px + 0.8vw);
                 &:hover{
                     cursor:pointer;
                 }
@@ -153,14 +153,14 @@ $green:rgb(65, 170, 50);
             }
         }
     }
-    #add_produits_marques{
+    #add_produits_marques_promotions{
         display:flex;
         flex-direction: row;
         justify-content: space-around;
         width:90%;
         position:relative;
         .add_container{
-            width:35%;
+            width:25%;
             flex-grow: 1;
             padding:2%;
             button.adm_modify_btn, button.add_btn{
@@ -344,6 +344,13 @@ $green:rgb(65, 170, 50);
                 &:hover{
                     cursor:pointer;
                 }
+            }
+        }
+        select{
+            margin:calc(max(1%, 8px));
+            font-family: $font;
+            option{
+                font-family: 'Courier';
             }
         }
         .close_form_btn{

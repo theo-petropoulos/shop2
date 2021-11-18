@@ -33,8 +33,9 @@
   text-align: center;
   position: relative;
   width: 20%;
-  min-width: 150px;
+  min-width: 120px;
   margin: 2%;
+  box-sizing: border-box;
 }
 
 #admin_alt #admins_list .admin_resume .del_admin_btn {
@@ -77,5 +78,13 @@
   margin: 2%;
   height: 5%;
   font-family: "DotGothic16";
+}
+
+@media screen and (max-width: 499px) {
+  #admin_alt #admins_list {
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+  }
 }
 /*# sourceMappingURL=admadmins.css.map */

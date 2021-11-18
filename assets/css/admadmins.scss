@@ -27,8 +27,9 @@ $green:rgb(65, 170, 50);
             text-align: center;
             position:relative;
             width:20%;
-            min-width: 150px;
+            min-width: 120px;
             margin:2%;
+            box-sizing: border-box;
             .del_admin_btn{
                 position:absolute;
                 top:5%;
@@ -72,5 +73,13 @@ $green:rgb(65, 170, 50);
         margin:2%;
         height:5%;
         font-family: $font;
+    }
+}
+
+@media screen and(max-width:499px){
+    #admin_alt{
+        #admins_list{
+            justify-content: center;
+        }
     }
 }

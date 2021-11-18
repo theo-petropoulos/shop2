@@ -3,6 +3,7 @@ window.item = null
 window.id = null
 
 $(function(){
+    changeProducts()
     /**
      * Modify an item
      */
@@ -84,6 +85,9 @@ $(function(){
         let item = $(this).parents('.add_form_container')
         item.css('visibility', 'hidden')
     })
+    $(document).on('click', '.add_form_container', function(e){
+        if($(e.target).hasClass('add_form_container')) $(this).css('visibility', 'hidden')
+    })
 
     /**
      * Submit the new item
@@ -164,4 +168,24 @@ $(function(){
             })
         }
     })
+
+    $(document).on('change', '#select_marques', changeProducts)
 })
+
+function changeProducts(){
+    let id_marque = $('#select_marques').find('option:selected').val()
+    let authtoken = Cookies.get('ADMauthtoken')
+    $.post(
+        '/shop/controller/data/JSHandler.php',
+        {adm_fetch_products:1, id_marque, authtoken},
+        (res)=>{
+            $('#select_produit_all').nextAll().remove()
+            let products = JSON.parse(res)
+            for(let i in products){
+                $('#select_produits').append(
+                    '<option value ="' + products[i]['id'] + '">' + products[i]['nom'] + '</option>'
+                )
+            }
+        }
+    )
+}

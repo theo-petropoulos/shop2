@@ -99,7 +99,7 @@
 }
 
 #admin_alt #produits details summary {
-  font-size: calc(18px + 1vw);
+  font-size: calc(16px + 0.8vw);
 }
 
 #admin_alt #produits details summary:hover {
@@ -226,7 +226,7 @@
   transition: all 0.3s;
 }
 
-#admin_alt #add_produits_marques {
+#admin_alt #add_produits_marques_promotions {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -240,15 +240,15 @@
   position: relative;
 }
 
-#admin_alt #add_produits_marques .add_container {
-  width: 35%;
+#admin_alt #add_produits_marques_promotions .add_container {
+  width: 25%;
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
   padding: 2%;
 }
 
-#admin_alt #add_produits_marques .add_container button.adm_modify_btn, #admin_alt #add_produits_marques .add_container button.add_btn {
+#admin_alt #add_produits_marques_promotions .add_container button.adm_modify_btn, #admin_alt #add_produits_marques_promotions .add_container button.add_btn {
   width: 90%;
   padding: 2%;
   background: white;
@@ -256,7 +256,7 @@
   font-family: "DotGothic16";
 }
 
-#admin_alt #add_produits_marques .add_container button.adm_modify_btn:hover, #admin_alt #add_produits_marques .add_container button.add_btn:hover {
+#admin_alt #add_produits_marques_promotions .add_container button.adm_modify_btn:hover, #admin_alt #add_produits_marques_promotions .add_container button.add_btn:hover {
   cursor: pointer;
   background: #f0b000;
   -webkit-transition: all 0.3s;
@@ -503,6 +503,15 @@
 
 .add_form_container .add_form input[type=submit]:hover {
   cursor: pointer;
+}
+
+.add_form_container .add_form select {
+  margin: calc(max(1%, 8px));
+  font-family: "DotGothic16";
+}
+
+.add_form_container .add_form select option {
+  font-family: 'Courier';
 }
 
 .add_form_container .add_form .close_form_btn {

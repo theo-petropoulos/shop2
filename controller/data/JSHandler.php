@@ -41,6 +41,12 @@ elseif(!empty($_POST['adm_delete_adm']) && $_POST['adm_delete_adm'] == 1){
         $jshandler->ADMdeleteADM();
     }
 }
+elseif(!empty($_POST['adm_fetch_products']) && $_POST['adm_fetch_products'] == 1){
+    $jshandler = new JSHandler($_POST);
+    if($jshandler->authAdmin()){
+        $jshandler->ADMfetchProducts();
+    }
+}
 
 class JSHandler{
     protected static $db;
@@ -283,5 +289,16 @@ class JSHandler{
                 return 0;
             }
         }
+    }
+
+    public function ADMfetchProducts(){
+        $stmt = self::$db->prepare(
+            'SELECT p.`id`, p.`nom`, p.`prix` 
+            FROM `produits` p 
+            WHERE p.`id_marque` = ? 
+            ORDER BY p.`nom`;'
+        );
+        $stmt->execute([$this->id_marque]);
+        echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
     }
 }

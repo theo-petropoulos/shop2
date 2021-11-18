@@ -9,13 +9,19 @@
     </div>
 
     <div id="produits">
+        <details id="promotions_det">
+            <summary>Afficher les promotions</summary>
+            <?php if(!empty($content) && !empty($content['promotions'])) : foreach($content['promotions'] as $key => $marque){ ?>
+
+            <?php } endif;?>
+        </details>
         <details id="marques_det">
             <summary>Afficher les marques</summary>
             <?php if(!empty($content) && !empty($content['marques'])) : foreach($content['marques'] as $key => $marque){?>
                 <div id="marques_<?=$marque['id'];?>" class="div_det">
                     <button class="adm_delete_btn">X</button>
                     <?php foreach($marque as $key => $value){
-                        if($key !== 'id'){ ?>
+                        if(!in_array($key, ['id_marque', 'id'])){ ?>
                             <div id="<?=$marque['id'] . '_' . $key . '_marques';?>" class="<?=$key;?>">
                                 <p><?=$value != '' ? $value : '0'?></p>
                                 <button class="adm_modify_button">Modifier</button>
@@ -33,7 +39,7 @@
                 <div id="produits_<?=$produit['id'];?>" class="div_det">
                     <button class="adm_delete_btn">X</button>
                     <?php foreach($produit as $key => $value){
-                        if($key !== 'id'){ ?>
+                         if(!in_array($key, ['id_marque', 'id'])){ ?>
                             <div id="<?=$produit['id'] . '_' . $key . '_produits';?>" class="<?=$key;?>">
                                 <h4><?=ucfirst($key);?></h4>
                                 <p><?=$value != '' ? $value : '0'?></p>
@@ -46,7 +52,7 @@
         </details>
     </div>
 
-    <section id="add_produits_marques">
+    <section id="add_produits_marques_promotions">
         <div id="add_marques" class="add_container">
             <button id="add_marques_btn" class="add_btn">+ Ajouter une marque</button>
             <div id="add_marques_form_container" class="add_form_container">
@@ -86,6 +92,33 @@
                         <label for="active">Activer ?</label>
                         <input type="checkbox" name="active">
                     </span>
+                    <input type="submit" name="Ajouter">
+                </form>
+            </div>
+        </div>
+        <div id="add_promotions" class="add_container">
+            <button id="add_promotions_btn" class="add_btn">+ Ajouter une promotion</button>
+            <div id="add_promotions_form_container" class="add_form_container">
+                <form method="post" action="" id="add_promotions_form" class="add_form">
+                    <button class="close_form_btn">X</button>
+                    <h3>Nouvelle promotion</h3>
+                    <label for="id_marque">Marque :</label>
+                    <select name="id_marque" id="select_marques">
+                        <option value="all_marques" id="select_marques_all" selected>Toutes les marques</option>
+                        <?php foreach($content['marques'] as $key => $marque){?>
+                            <option value="<?=$marque['id'];?>"><?=$marque['nom'];?></option>
+                        <?php } ?>
+                    </select>
+                    <label for="id_produit">Produit :</label>
+                    <select name="id_produit" id="select_produits">
+                        <option value="all_produits" id="select_produit_all">Tous les produits</option>
+                    </select>
+                    <label for="nom">Nom :</label>
+                    <input type="text" name="nom" required>
+                    <label for="debut">Date de début :</label>
+                    <input type="date" required>
+                    <label for="fin">Date de fin :</label>
+                    <input type="date" required>
                     <input type="submit" name="Ajouter">
                 </form>
             </div>

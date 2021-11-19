@@ -3,21 +3,21 @@ if(!empty($_POST['delete']) && in_array($_POST['delete'], ['address'])){
     $jshandler = new JSHandler($_POST);
     $jshandler->delete();
 }
-elseif(!empty($_POST['adm_modify']) && in_array($_POST['adm_modify'], ['clients', 'marques', 'produits'])){
+elseif(!empty($_POST['adm_modify']) && in_array($_POST['adm_modify'], ['clients', 'marques', 'produits', 'promotions'])){
     $jshandler = new JSHandler($_POST);
     if($jshandler->authAdmin()){
         $jshandler->ADMmodify();
     }
     else echo 'unauthorized';
 }
-elseif(!empty($_POST['adm_create']) && in_array($_POST['adm_create'], ['produits', 'marques']) ){
+elseif(!empty($_POST['adm_create']) && in_array($_POST['adm_create'], ['produits', 'marques', 'promotions']) ){
     $jshandler = new JSHandler($_POST, $_FILES);
     if($jshandler->authAdmin()){
         $jshandler->ADMcreate();
     }
     else echo 'unauthorized';
 }
-elseif(!empty($_POST['adm_delete']) && in_array($_POST['adm_delete'], ['produits', 'marques'])){
+elseif(!empty($_POST['adm_delete']) && in_array($_POST['adm_delete'], ['produits', 'marques', 'promotions'])){
     $jshandler = new JSHandler($_POST);
     if($jshandler->authAdmin()){
         $jshandler->ADMdelete();
@@ -100,72 +100,136 @@ class JSHandler{
     }
 
     public function ADMcreate(){
-        $values = [];
-        $col_string = '';
-        $param_string = '';
-        $i = 0;
-        if(!empty($this->image)){
-            $j = 0;
-            if($this->image['size'] < 10000000 && $this->image['error'] === UPLOAD_ERR_OK){
-                $temp_path = $this->image['tmp_name'];
-                $picture_name = $this->image['name'];
-                $picture_name_split = explode(".", $picture_name);
-                $extension = strtolower(end($picture_name_split));
-                if(in_array($extension, ['jpg', 'jpeg', 'bmp', 'gif', 'png', 'svg'])){
-                    $picture_hash_name = md5(time() . $this->image['name']) . '.' . $extension;
-                    $path = '../../assets/uploads/' . $this->adm_create . '/' . $picture_hash_name;
-                    $dbpath = 'assets/uploads/' . $this->adm_create . '/' . $picture_hash_name;
-                    if(move_uploaded_file($temp_path, $path)){
-                        $j = 1;
+        if($this->adm_create !== 'promotions'){
+            $values = [];
+            $col_string = '';
+            $param_string = '';
+            $i = 0;
+            if(!empty($this->image)){
+                $j = 0;
+                if($this->image['size'] < 10000000 && $this->image['error'] === UPLOAD_ERR_OK){
+                    $temp_path = $this->image['tmp_name'];
+                    $picture_name = $this->image['name'];
+                    $picture_name_split = explode(".", $picture_name);
+                    $extension = strtolower(end($picture_name_split));
+                    if(in_array($extension, ['jpg', 'jpeg', 'bmp', 'gif', 'png', 'svg'])){
+                        $picture_hash_name = md5(time() . $this->image['name']) . '.' . $extension;
+                        $path = '../../assets/uploads/' . $this->adm_create . '/' . $picture_hash_name;
+                        $dbpath = 'assets/uploads/' . $this->adm_create . '/' . $picture_hash_name;
+                        if(move_uploaded_file($temp_path, $path)){
+                            $j = 1;
+                        }
                     }
                 }
+            }
+            if((isset($j) && $j) || !isset($j)){
+                foreach($this as $key => $value){
+                    if(!in_array($key, ['authtoken', 'adm_create', 'image'])){
+                        if($key === 'active'){
+                            $i = 1;
+                        }
+                        else{
+                            array_push($values, $value);
+                            if($col_string === '') $col_string = '`' . $key . '`';
+                            else $col_string .= ', `' . $key . '`';
+                            $param_string = $param_string === '' ? '?' : $param_string . ', ?';
+                        }
+                    }
+                }
+                $col_string .= ', `active`';
+                array_push($values, $i);
+                $param_string .= ', ?';
+                if(!empty($this->image)){
+                    $col_string .= ', `image_path`';
+                    $param_string .= ', ?';
+                    array_push($values, $dbpath);
+                }
+                $query = 'INSERT INTO ' . $this->adm_create . '(' . $col_string . ') VALUES ( ' . $param_string . ')';
+                $stmt = self::$db->prepare($query);
+                $stmt->execute($values);
+                if($stmt->rowCount()){
+                    echo "SUCCESS";
+                }
+                else echo "ERR_SQL_INSRT";
             }
         }
-        if((isset($j) && $j) || !isset($j)){
-            foreach($this as $key => $value){
-                if(!in_array($key, ['authtoken', 'adm_create', 'image'])){
-                    if($key === 'active'){
-                        $i = 1;
+        elseif($this->adm_create === 'promotions'){
+            if(intval($this->id_produit)){
+                $stmt = self::$db->prepare(
+                    'INSERT INTO `promotions` (`id_produit`, `nom`, `pourcentage`, `debut`, `fin`)
+                    VALUES ( ?, ?, ?, ?, ?);'
+                );
+                $stmt->execute([$this->id_produit, $this->nom, $this->pourcentage, $this->debut, $this->fin]);
+                if($stmt->rowCount()){
+                    echo 'SUCCESS';
+                }
+                else echo 'ERR_SQL_INSRT';
+            }
+            else{
+                if(intval($this->id_marque)){
+                    $stmt = self::$db->prepare(
+                        'SELECT `id` FROM `produits`
+                        WHERE `id_marque` = ?;'
+                    );
+                    $stmt->execute([$this->id_marque]);
+                    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    foreach($products as $key => $product){
+                        $stmt = self::$db->prepare(
+                            'INSERT INTO `promotions` (`id_produit`, `nom`, `pourcentage`, `debut`, `fin`)
+                            VALUES ( ?, ?, ?, ?, ?);'
+                        );
+                        $stmt->execute([$product['id'], $this->nom, $this->pourcentage, $this->debut, $this->fin]);
+                        if($stmt->rowCount()){
+                            echo 'SUCCESS';
+                        }
+                        else echo 'ERR_SQL_INSRT';
                     }
-                    else{
-                        array_push($values, $value);
-                        if($col_string === '') $col_string = '`' . $key . '`';
-                        else $col_string .= ', `' . $key . '`';
-                        $param_string = $param_string === '' ? '?' : $param_string . ', ?';
+                }
+                else if($this->id_marque === 'all_marques' && $this->id_produit === 'all_produits'){
+                    $stmt = self::$db->query(
+                        'SELECT p.`id` 
+                        FROM `produits` p'
+                    );
+                    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    foreach($products as $key => $product){
+                        $stmt = self::$db->prepare(
+                            'INSERT INTO `promotions` (`id_produit`, `nom`, `pourcentage`, `debut`, `fin`)
+                            VALUES ( ?, ?, ?, ?, ?);'
+                        );
+                        $stmt->execute([$product['id'], $this->nom, $this->pourcentage, $this->debut, $this->fin]);
+                        if($stmt->rowCount()){
+                            echo 'SUCCESS';
+                        }
+                        else echo 'ERR_SQL_INSRT';
                     }
                 }
             }
-            $col_string .= ', `active`';
-            array_push($values, $i);
-            $param_string .= ', ?';
-            if(!empty($this->image)){
-                $col_string .= ', `image_path`';
-                $param_string .= ', ?';
-                array_push($values, $dbpath);
-            }
-            $query = 'INSERT INTO ' . $this->adm_create . '(' . $col_string . ') VALUES ( ' . $param_string . ')';
-            $stmt = self::$db->prepare($query);
-            $stmt->execute($values);
         }
     }
 
     public function ADMdelete(){
-        if($this->adm_delete === 'produits'){
-            $stmt = self::$db->prepare(
-                "SELECT `image_path` 
-                FROM $this->adm_delete 
-                WHERE `id` = ?;"
-            );
-            $stmt->execute([$this->id]);
-            if(!empty($result = $stmt->fetch(PDO::FETCH_ASSOC))){
-                $this->path = $_SERVER['DOCUMENT_ROOT'] . '/shop/' . $result['image_path'];
-                is_file($this->path) ? unlink($this->path) : null;
+        if($this->adm_delete === 'produits' || $this->adm_delete === 'promotions'){
+            if($this->adm_delete === 'produits'){
+                $stmt = self::$db->prepare(
+                    "SELECT `image_path` 
+                    FROM $this->adm_delete 
+                    WHERE `id` = ?;"
+                );
+                $stmt->execute([$this->id]);
+                if(!empty($result = $stmt->fetch(PDO::FETCH_ASSOC))){
+                    $this->path = $_SERVER['DOCUMENT_ROOT'] . '/shop/' . $result['image_path'];
+                    is_file($this->path) ? unlink($this->path) : null;
+                }
             }
             $stmt = self::$db->prepare(
                 "DELETE FROM $this->adm_delete 
                 WHERE `id` = ?;"
             );
             $stmt->execute([$this->id]);
+            if($stmt->rowCount())
+                echo "SUCCESS";
+            else 
+                echo "ERR_SQL_INSRT";
         }
         elseif($this->adm_delete === 'marques'){
             $stmt = self::$db->prepare(
@@ -189,6 +253,10 @@ class JSHandler{
                 COMMIT;"
             );
             $stmt->execute([$this->id, $this->id]);
+            if($stmt->rowCount())
+                echo "SUCCESS";
+            else 
+                echo "ERR_SQL_INSRT";
         }
     }
 

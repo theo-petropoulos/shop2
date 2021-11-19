@@ -34,8 +34,8 @@
   margin: calc(max(1%, 10px));
 }
 
-#admin_alt #adm_search_container #adm_search_marques, #admin_alt #adm_search_container #adm_search_produits {
-  width: 40%;
+#admin_alt #adm_search_container section {
+  width: 25%;
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
@@ -49,16 +49,16 @@
           justify-content: center;
 }
 
-#admin_alt #adm_search_container #adm_search_marques button, #admin_alt #adm_search_container #adm_search_produits button {
-  font-size: calc(20px + 1.2vw);
-  line-height: calc(20px + 1.2vw);
+#admin_alt #adm_search_container section button {
+  font-size: calc(16px + 0.8vw);
+  line-height: calc(16px + 0.8vw);
   background: none;
   border: none;
   color: #f05f00;
   font-family: "DotGothic16";
 }
 
-#admin_alt #adm_search_container #adm_search_marques button:hover, #admin_alt #adm_search_container #adm_search_produits button:hover {
+#admin_alt #adm_search_container section button:hover {
   color: #41aa32;
   cursor: pointer;
   -webkit-transition: all 0.3s;
@@ -99,7 +99,7 @@
 }
 
 #admin_alt #produits details summary {
-  font-size: calc(16px + 0.8vw);
+  font-size: calc(14px + 0.6vw);
 }
 
 #admin_alt #produits details summary:hover {
@@ -246,9 +246,15 @@
       -ms-flex-positive: 1;
           flex-grow: 1;
   padding: 2%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 #admin_alt #add_produits_marques_promotions .add_container button.adm_modify_btn, #admin_alt #add_produits_marques_promotions .add_container button.add_btn {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
   width: 90%;
   padding: 2%;
   background: white;
@@ -503,6 +509,10 @@
 
 .add_form_container .add_form input[type=submit]:hover {
   cursor: pointer;
+}
+
+.add_form_container .add_form input[type=number] {
+  -moz-appearance: textfield;
 }
 
 .add_form_container .add_form select {

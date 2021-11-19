@@ -4,6 +4,7 @@ window.id = null
 
 $(function(){
     changeProducts()
+    changeDiscount()
     /**
      * Modify an item
      */
@@ -100,6 +101,7 @@ $(function(){
         let form_id = $(this).attr('id').split('_')
         let table = form_id[1]
         let authtoken = Cookies.get('ADMauthtoken')
+        console.log(arr)
         if(table === 'produits'){
             var file = $('#image_form')[0].files
             if(file.length > 0 )
@@ -113,6 +115,7 @@ $(function(){
         })
         fd.append('adm_create', table)
         fd.append('authtoken', authtoken)
+        console.log(fd)
         $.ajax({
             url : '/shop/controller/data/JSHandler.php',
             type: "POST",
@@ -120,9 +123,16 @@ $(function(){
             processData: false,
             contentType: false,
             success:function(res){
-                location.reload()
+                console.log(res)
+                if(res.indexOf('SUCCESS') >= 0)
+                    location.reload()
+                else if(res.indexOf('ERR_SQL_INSRT') >= 0)
+                    alert('Une erreur est survenue lors de la mise à jour de la base de données. Veuillez contacter le support technique.')
+                else 
+                    alert('Une erreur inattendue est survenue. Veuillez contacter le support technique.')
             },
             error: function(jqXHR, textStatus, errorThrown){
+                // console.log(textStatus, errorThrown)
             }
         })
     })
@@ -131,6 +141,7 @@ $(function(){
      * Delete an item
      */
     $(document).on('click', '.adm_delete_btn', function(){
+        let resp = '';
         if($(this).parents('details').length){
             var container = '#' + $(this).parents('details').first().attr('id')
             var table = container.replace('#', '').replace('_det', '')
@@ -154,22 +165,34 @@ $(function(){
                 '/shop/controller/data/JSHandler.php',
                 {adm_delete:table, id, authtoken},
                 (res)=>{
-                    // console.log(res)
+                    resp = res
                 }
             )
             .done(()=>{
-                $('details').each(function(){
-                    let id = '#' + $(this).attr('id')
-                    $(id).load(' ' + id + ' > *')
-                })
-                if(typeof(search) !== 'undefined'){
-                    $(this).parents('.div_det').first().remove()
+                if(resp === 'SUCCESS'){
+                    $('details').each(function(){
+                        let id = '#' + $(this).attr('id')
+                        $(id).load(' ' + id + ' > *')
+                    })
+                    if(typeof(search) !== 'undefined'){
+                        $(this).parents('.div_det').first().remove()
+                    }
                 }
+                else alert('Une erreur est survenue pendant la mise à jour de la base de données. Veuillez contacter le support technique.')
             })
         }
     })
 
+    /**
+     * Show desired products according to the selected brand
+     */
     $(document).on('change', '#select_marques', changeProducts)
+
+    /**
+     * Show actual discount on selected product
+     */
+     $(document).on('change', '#select_produits', changeDiscount)
+     $(document).on('input', 'input[name=pourcentage]', changeDiscount)
 })
 
 function changeProducts(){
@@ -183,9 +206,26 @@ function changeProducts(){
             let products = JSON.parse(res)
             for(let i in products){
                 $('#select_produits').append(
-                    '<option value ="' + products[i]['id'] + '">' + products[i]['nom'] + '</option>'
+                    '<option value ="' + products[i]['id'] + '" price="' + products[i]['prix'] + '">' + products[i]['nom'] + '</option>'
                 )
             }
         }
     )
+}
+
+function changeDiscount(){
+    let produit = $('#select_produits').find('option:selected')
+    let id_produit = produit.val()
+    if(parseInt(id_produit) == id_produit){
+        let price = produit.attr('price')
+        let input_number = $('#add_promotions_form').find('input[type=number]').first()
+        let discount = input_number.val()
+        if(discount){
+            let discounted_price = ( price - discount / 100 * price ).toFixed(2)
+            $("#show_discounted_price").empty()
+            $("#show_discounted_price").html('<del>' + price + '</del> => ' + discounted_price)
+        }
+        else $("#show_discounted_price").empty()
+    }
+    else $("#show_discounted_price").empty()
 }

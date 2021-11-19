@@ -3,6 +3,9 @@ window.item = '';
 window.authtoken = Cookies.get('ADMauthtoken')
 
 $(function(){
+    /**
+     * Open search bar
+     */
     $(document).on('click', '.trigger_adm_search', function(){
         item = $(this).parent().attr('id').split('_')[2]
         $('#search_' + item + '_container').css({
@@ -14,6 +17,9 @@ $(function(){
         $("#adm_search_input_" + item).focus()
     })
 
+    /**
+     * Close search bar
+     */
     $(document).on('click', '.search_close_btn', function(){
         $(this).parent().animate({
             bottom:"-100%"
@@ -22,6 +28,17 @@ $(function(){
                 "visibility":"hidden"
             })
         })
+    })
+    $(document).on('click', '.search_item_container', function(e){
+        if($(e.target).is('#search_marques_container') || $(e.target).is('#search_produits_container')){
+            $(this).children().animate({
+                bottom:"-100%"
+            }, 600, function(){
+                $(e.target).css({
+                    "visibility":"hidden"
+                })
+            })
+        }
     })
     
     $(document).on({

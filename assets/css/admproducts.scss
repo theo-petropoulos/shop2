@@ -24,16 +24,16 @@ $green:rgb(65, 170, 50);
         flex-wrap: wrap;
         position:relative;
         margin:calc(max(1%, 10px));
-        #adm_search_marques, #adm_search_produits{
-            width:40%;
+        section{
+            width:25%;
             flex-grow: 1;
             min-width: 200px;
             position:relative;
             display: flex;
             justify-content: center;
             button{
-                font-size: calc(20px + 1.2vw);
-                line-height: calc(20px + 1.2vw);
+                font-size: calc(16px + 0.8vw);
+                line-height: calc(16px + 0.8vw);
                 background:none;
                 border:none;
                 color:$orange;
@@ -65,7 +65,7 @@ $green:rgb(65, 170, 50);
             margin:calc(max(1%,15px)) 0%;
             box-sizing: border-box;
             summary{
-                font-size: calc(16px + 0.8vw);
+                font-size: calc(14px + 0.6vw);
                 &:hover{
                     cursor:pointer;
                 }
@@ -163,7 +163,9 @@ $green:rgb(65, 170, 50);
             width:25%;
             flex-grow: 1;
             padding:2%;
+            display:flex;
             button.adm_modify_btn, button.add_btn{
+                flex-grow: 1;
                 width:90%;
                 padding:2%;
                 background:white;
@@ -344,6 +346,9 @@ $green:rgb(65, 170, 50);
                 &:hover{
                     cursor:pointer;
                 }
+            }
+            &[type=number]{
+                -moz-appearance: textfield;
             }
         }
         select{

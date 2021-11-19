@@ -6,13 +6,34 @@
         <section id="adm_search_produits">
             <button type="submit" class="trigger_adm_search">Rechercher un produit</button>
         </section>
+        <section id="adm_search_promotions">
+            <button type="submit" class="trigger_adm_search">Rechercher une promotion</button>
+        </section>
     </div>
 
     <div id="produits">
         <details id="promotions_det">
             <summary>Afficher les promotions</summary>
-            <?php if(!empty($content) && !empty($content['promotions'])) : foreach($content['promotions'] as $key => $marque){ ?>
-
+            <?php if(!empty($content) && !empty($content['promotions'])) : foreach($content['promotions'] as $key => $promotion){ ?>
+                <div id="promotions_<?=$promotion['id'];?>" class="div_det">
+                <button class="adm_delete_btn">X</button>
+                <?php foreach($promotion as $key => $value){
+                    if(!in_array($key, ['id_marque', 'id', 'id_produit', 'nom_produit'])){ 
+                        if($key === 'nom_marque'){?>
+                            <div id="produit_<?=$promotion['id_produit'];?>" class="<?=$key;?>">
+                                <h3>Produit :</h3>
+                                <p><?=$value != '' ? $value : '0'?> - <?=$promotion['nom_produit'];?></p>
+                            </div>
+                        <?php } else{ ?>
+                            <div id="<?=$promotion['id'] . '_' . $key . '_promotions';?>" class="<?=$key;?>">
+                                <h3><?=ucfirst($key);?></h3>
+                                <p><?=$value != '' ? $value : '0'?></p>
+                                <button class="adm_modify_button">Modifier</button>
+                            </div>
+                    <?php } 
+                    }
+                } ?>
+                </div>
             <?php } endif;?>
         </details>
         <details id="marques_det">
@@ -23,6 +44,7 @@
                     <?php foreach($marque as $key => $value){
                         if(!in_array($key, ['id_marque', 'id'])){ ?>
                             <div id="<?=$marque['id'] . '_' . $key . '_marques';?>" class="<?=$key;?>">
+                                <h3><?=ucfirst($key);?></h3>
                                 <p><?=$value != '' ? $value : '0'?></p>
                                 <button class="adm_modify_button">Modifier</button>
                             </div>
@@ -113,12 +135,14 @@
                     <select name="id_produit" id="select_produits">
                         <option value="all_produits" id="select_produit_all">Tous les produits</option>
                     </select>
-                    <label for="nom">Nom :</label>
+                    <label for="nom">Nom de la promotion :</label>
                     <input type="text" name="nom" required>
+                    <label for="pourcentage">Pourcentage de réduction : <span id="show_discounted_price"></span></label>
+                    <input type="number" name="pourcentage" required>
                     <label for="debut">Date de début :</label>
-                    <input type="date" required>
+                    <input type="date" name="debut" required>
                     <label for="fin">Date de fin :</label>
-                    <input type="date" required>
+                    <input type="date" name="fin" required>
                     <input type="submit" name="Ajouter">
                 </form>
             </div>

@@ -29,6 +29,14 @@ class Manager extends Database{
             ORDER BY `active` DESC, `nom` ASC;'
         );
         $content['marques'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = self::$db->query(
+            'SELECT p.`id`, p.`id_produit`, p.`nom` AS `nom_promotion`, pt.`nom` AS `nom_produit`, m.`nom` AS `nom_marque`, p.`pourcentage`, p.`debut`, p.`fin` 
+            FROM `promotions` p 
+            INNER JOIN `produits` pt ON p.`id_produit` = pt.`id` 
+            INNER JOIN `marques` m ON m.`id` = pt.`id_marque` 
+            ORDER BY p.`debut`, p.`nom`;'
+        );
+        $content['promotions'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $content;
     }
 

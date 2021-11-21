@@ -119,6 +119,9 @@
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   margin: calc(max(1%, 15px)) 0%;
   padding: 1%;
   border-bottom: 1px solid black;
@@ -153,7 +156,7 @@
 }
 
 #admin_alt #produits details .div_det div {
-  width: 20%;
+  width: 25%;
   min-width: 100px;
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
@@ -211,7 +214,7 @@
 }
 
 #admin_alt #produits details .div_det a {
-  width: 30%;
+  width: 15%;
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
@@ -221,9 +224,133 @@
 }
 
 #admin_alt #produits details .div_det a:hover {
-  color: #5abeff;
+  color: red;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
+}
+
+#admin_alt #produits details details.det_det {
+  position: relative;
+  font-size: initial;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
+  width: 85%;
+  margin: calc(max(10px, 1%)) auto;
+  text-align: center;
+}
+
+#admin_alt #produits details details.det_det summary {
+  width: 100%;
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-size: initial;
+  box-sizing: content-box;
+  margin: 0 auto;
+  list-style: circle;
+}
+
+#admin_alt #produits details details.det_det summary .span_div {
+  width: 12%;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+#admin_alt #produits details details.det_det summary .span_div:first-of-type {
+  width: 2%;
+}
+
+#admin_alt #produits details details.det_det summary .span_div i:first-of-type {
+  display: block;
+}
+
+#admin_alt #produits details details.det_det summary .span_div i:last-of-type {
+  display: none;
+}
+
+#admin_alt #produits details details.det_det summary .span_div button {
+  outline: 0;
+  border: 1px solid black;
+  padding: 2px 5px;
+  border-radius: none;
+  font-family: "DotGothic16";
+  background: #f0b000;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+}
+
+#admin_alt #produits details details.det_det summary .span_div button:hover {
+  cursor: pointer;
+  background: #41aa32;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+#admin_alt #produits details details.det_det summary .span_div a {
+  text-decoration: none;
+  color: #195af0;
+}
+
+#admin_alt #produits details details.det_det summary .span_div a:hover {
+  color: red;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+#admin_alt #produits details details.det_det[open] summary i:first-of-type {
+  display: none;
+}
+
+#admin_alt #produits details details.det_det[open] summary i:last-of-type {
+  display: block;
+}
+
+#admin_alt #produits details details.det_det div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+#admin_alt #produits details details.det_det div .div_det {
+  width: 25%;
+  border: 1px solid black;
+  margin: calc(max(10px, 1%));
+}
+
+#admin_alt #produits details details.det_det div .div_det div {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 
 #admin_alt #add_produits_marques_promotions {
@@ -346,6 +473,9 @@
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   margin: calc(max(1%, 15px)) 0%;
   padding: 1%;
   border-bottom: 1px solid black;
@@ -381,7 +511,7 @@
 
 #admin_alt .search_item_container .search_results_box .div_det div {
   width: 20%;
-  min-width: 100px;
+  min-width: 120px;
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
@@ -453,6 +583,10 @@
   color: #5abeff;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
+}
+
+#admin_alt .search_item_container .search_results_box#search_results_promotions .div_det div {
+  width: 15%;
 }
 
 .add_form_container {

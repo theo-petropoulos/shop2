@@ -15,26 +15,53 @@
         <details id="promotions_det">
             <summary>Afficher les promotions</summary>
             <?php if(!empty($content) && !empty($content['promotions'])) : foreach($content['promotions'] as $key => $promotion){ ?>
-                <div id="promotions_<?=$promotion['id'];?>" class="div_det">
-                <button class="adm_delete_btn">X</button>
-                <?php foreach($promotion as $key => $value){
-                    if(!in_array($key, ['id_marque', 'id', 'id_produit', 'nom_produit'])){ 
-                        if($key === 'nom_marque'){?>
-                            <div id="produit_<?=$promotion['id_produit'];?>" class="<?=$key;?>">
-                                <h3>Produit :</h3>
-                                <p><?=$value != '' ? $value : '0'?> - <?=$promotion['nom_produit'];?></p>
+                <details id="promotions_<?=$key?>" class="det_det">
+                    <summary>
+                        <div class="span_div">
+                            <i class="fas fa-caret-right"></i>
+                            <i class="fas fa-caret-down"></i>
+                        </div>
+                        <div class="span_div" id="<?=$key;?>_nom">
+                            <h3>Promotion :</h3>
+                            <p><?=$key;?></p>
+                            <button class="adm_modify_button">Modifier</button>
+                        </div>
+                        <div class="span_div" id="<?=$key;?>_pourcentage">
+                            <h3>Pourcentage :</h3>
+                            <p><?=$promotion[0]['pourcentage'];?></p>
+                            <button class="adm_modify_button">Modifier</button>
+                        </div>
+                        <div class="span_div" id="<?=$key;?>_debut">
+                            <h3>Début :</h3>
+                            <p><?=$promotion[0]['debut'];?></p>
+                            <button class="adm_modify_button">Modifier</button>
+                        </div>
+                        <div class="span_div" id="<?=$key;?>_fin">
+                            <h3>Fin :</h3>
+                            <p><?=$promotion[0]['fin'];?></p>
+                            <button class="adm_modify_button">Modifier</button>
+                        </div>
+                        <div class="span_div">
+                            <a href="admin_delete_promotions" id="<?=$key;?>">Supprimer la promotion</a>
+                        </div>
+                    </summary>
+                    <div>
+                        <?php foreach($promotion as $key => $promo_item){ ?>
+                            <div id="promotions_<?=$promo_item['id'];?>" class="div_det">
+                                <button class="adm_delete_btn">X</button>
+                                <?php foreach($promo_item as $key => $value){
+                                    if($key === 'nom_marque'){?>
+                                        <div id="produit_<?=$promo_item['id_produit'];?>" class="<?=$key;?>">
+                                            <h3>Produit :</h3>
+                                            <p><?=$value != '' ? $value : '0'?> - <?=$promo_item['nom_produit'];?></p>
+                                        </div>
+                                    <?php }
+                                } ?>
                             </div>
-                        <?php } else{ ?>
-                            <div id="<?=$promotion['id'] . '_' . $key . '_promotions';?>" class="<?=$key;?>">
-                                <h3><?=ucfirst($key);?></h3>
-                                <p><?=$value != '' ? $value : '0'?></p>
-                                <button class="adm_modify_button">Modifier</button>
-                            </div>
-                    <?php } 
-                    }
-                } ?>
-                </div>
-            <?php } endif;?>
+                        <?php } ?>
+                    </div>
+                </details>
+                <?php } endif;?>
         </details>
         <details id="marques_det">
             <summary>Afficher les marques</summary>
@@ -164,6 +191,16 @@
             <button id="search_produits_close_btn" class="search_close_btn"><i class="fas fa-chevron-down"></i></button>
             <input type="text" name="adm_search" class="adm_search_input" id="adm_search_input_produits">
             <div class="search_results_box" id="search_results_produits">
+
+            </div>
+        </div>
+    </section>
+
+    <section id="search_promotions_container" class="search_item_container">
+        <div id="search_promotions_box" class="search_item_box">
+            <button id="search_promotions_close_btn" class="search_close_btn"><i class="fas fa-chevron-down"></i></button>
+            <input type="text" name="adm_search" class="adm_search_input" id="adm_search_input_promotions">
+            <div class="search_results_box" id="search_results_promotions">
 
             </div>
         </div>

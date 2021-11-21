@@ -1,6 +1,7 @@
 window.is_search = null
 window.item = null
 window.id = null
+window.authtoken = Cookies.get('ADMauthtoken')
 
 $(function(){
     changeProducts()
@@ -10,18 +11,46 @@ $(function(){
      */
     $(document).on('click', '.adm_modify_button', function(){
         if($(this).parents('.search_results_box').length) is_search = 1
-        let id_div = $(this).parent('div').attr('id').split('_')
+        let container = $(this).parent('div')
+        let id_container = container.attr('id').split('_')
         let value = $(this).prev('p').text()
-        id = id_div[0]
-        item = id_div[1]
+
+        id = id_container[0]
+        item = id_container[1]
         window['prevHTML_' + item + '_' + id] = $(this).parents('div').html()
-        $(this).parent('div').html(
-            '<input type="text" name="' + item + '" value="' + value + '" required>\
-            <span>\
-            <button class="adm_modify_submit">Valider</button>\
-            <button class="adm_modify_cancel">Annuler</button>\
-            </span>'
-        )
+        if(!container.hasClass('nom_marque')){
+            container.html(
+                '<input type="text" name="' + item + '" value="' + value + '" required>\
+                <span>\
+                <button class="adm_modify_submit">Valider</button>\
+                <button class="adm_modify_cancel">Annuler</button>\
+                </span>'
+            )
+        }
+        else{
+            let marques = null
+            $.post(
+                '/shop/controller/data/JSHandler.php',
+                {adm_fetch_marques:1, authtoken},
+                (res)=>{
+                    marques = JSON.parse(res)
+                }
+            )
+            .done(()=>{
+                container.html(
+                    '<select id="select_marques_modify" name="id_marque"></select>\
+                    <span>\
+                        <button class="adm_modify_submit">Valider</button>\
+                        <button class="adm_modify_cancel">Annuler</button>\
+                    </span>'
+                )
+                for(let marque of marques){
+                    $('#select_marques_modify').append(
+                        '<option value="' + marque['id'] + '">' + marque['nom'] + '</option>'
+                    )
+                }
+            })
+        }
     })
 
     /**
@@ -32,41 +61,73 @@ $(function(){
             $(this).parents('div').first().html(window['prevHTML_' + item + '_' + id])
         }
         else{
-            let div = "#" + $(this).parents('div').first().attr('id')
-            $(div).load(" " + div + " > *")
+            let container = $(this).parents('div')
+            let id_container = "#" + container.attr('id')
+            $(id_container).load(" " + id_container + " > *")
         }
     })
 
     /**
      * Submit the modification
      */
-    $(document).on('click', '.adm_modify_submit', function(){
+    $(document).on('click', '.adm_modify_submit', function(e){
+        let proceed = 1
         let div = "#" + $(this).parents('div').first().attr('id')
         let id_div = $(this).parents('div').first().attr('id').split('_')
         let id = id_div[0]
-        let item = id_div[1]
-        let value = $(this).parents('div').first().find('input').val()
-        let authtoken = Cookies.get('ADMauthtoken')
+        let item = id_div[2] === 'marque' ? 'id_marque' : id_div[1]
+        let value = $(this).parents('div').first().find('input').val() ?? $(this).parents('div').first().find('select').val()
+        console.log(value)
         let table = $(this).parents('details').first().length ? 
-            $(this).parents('details').first().attr('id').replace('_det', '') : 
+            $(this).parents('details').first().attr('id').replace('_det', '').split('_')[0] : 
             $(this).parents('div').first().attr('id').split('_')[2]
-        $.post(
-            '/shop/controller/data/JSHandler.php',
-            {adm_modify:table, authtoken, id, item, value},
-            (res)=>{
-                // console.log(res)
-            }
-        )
-        .done(()=>{
-            if(is_search){
-                let parent = $(this).parents('div').first()
-                $(this).parents('div').first().html(window['prevHTML_' + item + '_' + id])
-                parent.find('p').html(value)
-            }
+        if(item === 'fin' || item === 'debut'){
+            var d = new Date(value);
+            if (isNaN(d.getTime()))
+                proceed = 0
             else{
-                $(div).load(" " + div + " > *")
+                if(item === 'fin'){
+                    let cmpvalue = $('#' + id + '_debut').find('p').text()
+                    if(cmpvalue > value)
+                        proceed = 0
+                }
+                else if(item === 'fin'){
+                    let cmpvalue = $('#' + id + '_fin').find('p').text()
+                    if(cmpvalue < value)
+                        proceed = 0
+                }
             }
-        })
+        }
+        if(proceed){
+            $.post(
+                '/shop/controller/data/JSHandler.php',
+                {adm_modify:table, authtoken, id, item, value},
+                (res)=>{
+                    console.log(res)
+                }
+            )
+            .done(()=>{
+                if(is_search){
+                    let parent = $(this).parents('div').first()
+                    $(this).parents('div').first().html(window['prevHTML_' + item + '_' + id])
+                    parent.find('p').html(value)
+                }
+                else{
+                    if(parseInt(id) != id){
+                        let parent = $(this).parents('div').first()
+                        $(this).parents('div').first().html(window['prevHTML_' + item + '_' + id])
+                        parent.find('p').html(value)
+                        parent.attr('id', value + '_nom')
+                    }
+                    else
+                        $(div).load(" " + div + " > *")
+                }
+            })
+        }
+        else{
+            $(div).find('p').last().remove()
+            $(div).append('<p>La date est invalide.</p>')
+        }
     })
 
     /**
@@ -100,7 +161,6 @@ $(function(){
         let arr = stringSer.split('&')
         let form_id = $(this).attr('id').split('_')
         let table = form_id[1]
-        let authtoken = Cookies.get('ADMauthtoken')
         console.log(arr)
         if(table === 'produits'){
             var file = $('#image_form')[0].files
@@ -144,7 +204,7 @@ $(function(){
         let resp = '';
         if($(this).parents('details').length){
             var container = '#' + $(this).parents('details').first().attr('id')
-            var table = container.replace('#', '').replace('_det', '')
+            var table = container.replace('#', '').replace('_det', '').split('_')[0]
             var id = $(this).parent().attr('id').replace(table + '_', '')
         }
         else{
@@ -153,7 +213,6 @@ $(function(){
             var id = container.split('_')[1]
             var search = 1
         }    
-        let authtoken = Cookies.get('ADMauthtoken')
         if(table === 'marques'){
             var i = 0
             if(confirm('Attention : Supprimer une marque entrainera la suppression de tous les produits associés. Continuer ?')){
@@ -182,6 +241,20 @@ $(function(){
             })
         }
     })
+    $(document).on('click', 'a[href="admin_delete_promotions"]', function(e){
+        e.preventDefault()
+        let nom = $(this).parents('details').first().attr('id').split('_')[1]
+        if(confirm('Attention : Vous allez supprimer la promotion sur tous les produits affectés. Continuer ?')){
+            $.post(
+                '/shop/controller/data/JSHandler.php',
+                {adm_delete_discount:1, nom, authtoken},
+                (res)=>{
+                    console.log(res)
+                    $('#promotions_det').load(' #promotions_det > *')
+                }
+            )
+        }
+    })
 
     /**
      * Show desired products according to the selected brand
@@ -197,7 +270,6 @@ $(function(){
 
 function changeProducts(){
     let id_marque = $('#select_marques').find('option:selected').val()
-    let authtoken = Cookies.get('ADMauthtoken')
     $.post(
         '/shop/controller/data/JSHandler.php',
         {adm_fetch_products:1, id_marque, authtoken},

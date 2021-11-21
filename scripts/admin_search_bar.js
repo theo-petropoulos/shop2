@@ -68,7 +68,7 @@ $(function(){
                             </div>"
                         )
                         for(let key in object){
-                            if(key !== 'id'){
+                            if(!['id', 'id_produit'].includes(key)){
                             $("#" + item + "_" + object['id'] + "_search").append(
                                 "<div id='" + object['id'] + "_" + key + "_" + item + "_search' class='" + key + "'>\
                                     <h3>" + key + "</h3>\

@@ -41,10 +41,22 @@ elseif(!empty($_POST['adm_delete_adm']) && $_POST['adm_delete_adm'] == 1){
         $jshandler->ADMdeleteADM();
     }
 }
+elseif(!empty($_POST['adm_delete_discount']) && $_POST['adm_delete_discount'] == 1){
+    $jshandler = new JSHandler($_POST);
+    if($jshandler->authAdmin()){
+        $jshandler->ADMdeleteDiscount();
+    }
+}
 elseif(!empty($_POST['adm_fetch_products']) && $_POST['adm_fetch_products'] == 1){
     $jshandler = new JSHandler($_POST);
     if($jshandler->authAdmin()){
         $jshandler->ADMfetchProducts();
+    }
+}
+elseif(!empty($_POST['adm_fetch_marques']) && $_POST['adm_fetch_marques'] == 1){
+    $jshandler = new JSHandler($_POST);
+    if($jshandler->authAdmin()){
+        $jshandler->ADMfetchBrands();
     }
 }
 
@@ -53,8 +65,10 @@ class JSHandler{
     
     public function __construct(array $array, array $file = NULL){
         self::$db = new PDO('mysql:host=localhost;dbname=shop', 'root', '');
-        foreach($array as $key => $value)
-                $this->$key = htmlspecialchars($value, ENT_QUOTES, "UTF-8");
+        foreach($array as $key => $value){
+            if($key === 'id' && intval($value) != $value) $this->nom = $value;
+            else $this->$key = htmlspecialchars($value, ENT_QUOTES, "UTF-8");
+        }
         if(!empty($file))
             foreach($file as $key => $value) $this->$key = $value;
     }
@@ -90,11 +104,20 @@ class JSHandler{
     }
 
     public function ADMmodify(){
-        $stmt = self::$db->prepare(
-            "UPDATE $this->adm_modify SET $this->item = ? 
-            WHERE `id` = ?;"
-        );
-        $stmt->execute([$this->value, $this->id]);
+        if($this->adm_modify !== 'promotions'){
+            $stmt = self::$db->prepare(
+                "UPDATE $this->adm_modify SET $this->item = ? 
+                WHERE `id` = ?;"
+            );
+            $stmt->execute([$this->value, $this->id]);
+        }
+        elseif($this->adm_modify === 'promotions'){
+            $stmt = self::$db->prepare(
+                "UPDATE $this->adm_modify SET $this->item = ? 
+                WHERE `nom` = ?;"
+            );
+            $stmt->execute([$this->value, $this->nom]);
+        }
         if($stmt->rowCount()) echo "success";
         else echo "failure";
     }
@@ -287,6 +310,19 @@ class JSHandler{
                 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 echo json_encode($results);
                 break;
+            case 'promotions':
+                $stmt = self::$db->prepare(
+                    'SELECT p.`id`, p.`id_produit`, p.`nom` AS `nom_promotion`, pt.`nom` AS `nom_produit`, m.`nom` AS `nom_marque`, p.`pourcentage`, p.`debut`, p.`fin` 
+                    FROM `promotions` p 
+                    INNER JOIN `produits` pt ON p.`id_produit` = pt.`id` 
+                    INNER JOIN `marques` m ON m.`id` = pt.`id_marque` 
+                    WHERE p.`nom` LIKE ? OR p.`nom` LIKE ? OR pt.`nom` LIKE ? OR pt.`nom` LIKE ? 
+                    ORDER BY p.`nom`, pt.`nom`;'
+                );
+                $stmt->execute([$search, $search2, $search, $search2]);
+                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                echo json_encode($results);
+                break;
             default:
                 echo "ERR_SEARCH";
                 break;
@@ -359,6 +395,18 @@ class JSHandler{
         }
     }
 
+    public function ADMdeleteDiscount(){
+        $stmt = self::$db->prepare(
+            'DELETE FROM `promotions` 
+            WHERE `nom` = ?;'
+        );
+        $stmt->execute([$this->nom]);
+        if($stmt->rowCount())
+            echo "SUCCESS";
+        else 
+            echo "ERR_SQL_DEL";
+    }
+
     public function ADMfetchProducts(){
         $stmt = self::$db->prepare(
             'SELECT p.`id`, p.`nom`, p.`prix` 
@@ -368,5 +416,14 @@ class JSHandler{
         );
         $stmt->execute([$this->id_marque]);
         echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+    }
+
+    public function ADMfetchBrands(){
+        $query = self::$db->query(
+            'SELECT m.`id`, m.`nom` 
+            FROM `marques` m 
+            ORDER BY m.`nom`;'
+        );
+        echo json_encode($query->fetchAll(PDO::FETCH_ASSOC));
     }
 }

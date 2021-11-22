@@ -112,6 +112,14 @@ class JSHandler{
             $stmt->execute([$this->value, $this->id]);
         }
         elseif($this->adm_modify === 'promotions'){
+            if(empty($this->nom)){
+                $stmt = self::$db->prepare(
+                    'SELECT `nom` FROM `promotions` WHERE `id` = ?;'
+                );
+                $stmt->execute([$this->id]);
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                $this->nom = $result['nom'];
+            }
             $stmt = self::$db->prepare(
                 "UPDATE $this->adm_modify SET $this->item = ? 
                 WHERE `nom` = ?;"
@@ -179,10 +187,13 @@ class JSHandler{
         elseif($this->adm_create === 'promotions'){
             if(intval($this->id_produit)){
                 $stmt = self::$db->prepare(
-                    'INSERT INTO `promotions` (`id_produit`, `nom`, `pourcentage`, `debut`, `fin`)
-                    VALUES ( ?, ?, ?, ?, ?);'
+                    'BEGIN;
+                    DELETE FROM `promotions` WHERE `id_produit` = ?;
+                    INSERT INTO `promotions` (`id_produit`, `nom`, `pourcentage`, `debut`, `fin`)
+                    VALUES ( ?, ?, ?, ?, ?);
+                    COMMIT;'
                 );
-                $stmt->execute([$this->id_produit, $this->nom, $this->pourcentage, $this->debut, $this->fin]);
+                $stmt->execute([$this->id_produit, $this->id_produit, $this->nom, $this->pourcentage, $this->debut, $this->fin]);
                 if($stmt->rowCount()){
                     echo 'SUCCESS';
                 }
@@ -198,10 +209,13 @@ class JSHandler{
                     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     foreach($products as $key => $product){
                         $stmt = self::$db->prepare(
-                            'INSERT INTO `promotions` (`id_produit`, `nom`, `pourcentage`, `debut`, `fin`)
-                            VALUES ( ?, ?, ?, ?, ?);'
+                            'BEGIN;
+                            DELETE FROM `promotions` WHERE `id_produit` = ?;
+                            INSERT INTO `promotions` (`id_produit`, `nom`, `pourcentage`, `debut`, `fin`)
+                            VALUES ( ?, ?, ?, ?, ?);
+                            COMMIT;'
                         );
-                        $stmt->execute([$product['id'], $this->nom, $this->pourcentage, $this->debut, $this->fin]);
+                        $stmt->execute([$product['id'], $product['id'], $this->nom, $this->pourcentage, $this->debut, $this->fin]);
                         if($stmt->rowCount()){
                             echo 'SUCCESS';
                         }
@@ -312,7 +326,7 @@ class JSHandler{
                 break;
             case 'promotions':
                 $stmt = self::$db->prepare(
-                    'SELECT p.`id`, p.`id_produit`, p.`nom` AS `nom_promotion`, pt.`nom` AS `nom_produit`, m.`nom` AS `nom_marque`, p.`pourcentage`, p.`debut`, p.`fin` 
+                    'SELECT p.`id`, p.`id_produit`, p.`nom` AS `nom_promotions`, pt.`nom` AS `nom_produit`, m.`nom` AS `nom_marque`, p.`pourcentage`, p.`debut`, p.`fin` 
                     FROM `promotions` p 
                     INNER JOIN `produits` pt ON p.`id_produit` = pt.`id` 
                     INNER JOIN `marques` m ON m.`id` = pt.`id_marque` 

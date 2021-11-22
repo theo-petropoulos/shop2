@@ -184,16 +184,20 @@ $f3->route('GET /connexion*',
     }
 );
 
-// $f3->route('GET /confirm_register*',
-//     function($f3, $params){
-//         $f3->set('action', 'register_confirm');
-//         echo "yes";
-//     }
-// );
-
 /**
  * Products
  */
+$f3->route('GET /marques',
+    function($f3, $params){
+        $title = 'NOS PRODUITS';
+        require_once REQUIRES . 'head.php';
+        require_once REQUIRES . 'header.php';
+        require CONTROLLER . 'products/ProduitsCTRL.php';
+        $f3->set('action', 'show_all');
+        $page = new ProduitsCTRL();
+    }
+);
+
 $f3->route('GET /marques/@marque',
     function($f3, $params){
 

@@ -54,7 +54,7 @@ $(function(){
                     '/shop/controller/data/JSHandler.php',
                     {adm_search, table, authtoken},
                     (res)=>{
-                        console.log(res)
+                        // console.log(res)
                     })
                 .done(function(data, status){
                 try{
@@ -68,14 +68,25 @@ $(function(){
                             </div>"
                         )
                         for(let key in object){
-                            if(!['id', 'id_produit'].includes(key)){
+                            let array = ['id', 'id_produit']
+                            if(table === 'promotions') array.push('nom_produit')
+                            if(!array.includes(key)){
+                                let value = object[key]
+                                if(key === 'nom_marque'){
+                                    key = 'nom_produit'
+                                    value += ' - ' + object['nom_produit']
+                                }
                             $("#" + item + "_" + object['id'] + "_search").append(
                                 "<div id='" + object['id'] + "_" + key + "_" + item + "_search' class='" + key + "'>\
                                     <h3>" + key + "</h3>\
-                                    <p>" + object[key] + "</p>\
-                                    <button class='adm_modify_button'>Modifier</button>\
+                                    <p>" + value + "</p>\
                                 </div>"
-                            )
+                                )
+                            if(key !== 'nom_produit'){
+                                $("#" + object['id'] + "_" + key + "_" + item + "_search").append(
+                                "<button class='adm_modify_button'>Modifier</button>"
+                                )
+                            }
                             }
                         }
                     clearTimeout(clear);

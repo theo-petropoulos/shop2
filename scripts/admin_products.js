@@ -77,7 +77,6 @@ $(function(){
         let id = id_div[0]
         let item = id_div[2] === 'marque' ? 'id_marque' : id_div[1]
         let value = $(this).parents('div').first().find('input').val() ?? $(this).parents('div').first().find('select').val()
-        console.log(value)
         let table = $(this).parents('details').first().length ? 
             $(this).parents('details').first().attr('id').replace('_det', '').split('_')[0] : 
             $(this).parents('div').first().attr('id').split('_')[2]
@@ -87,14 +86,18 @@ $(function(){
                 proceed = 0
             else{
                 if(item === 'fin'){
-                    let cmpvalue = $('#' + id + '_debut').find('p').text()
+                    let cmpvalue = $('#' + id + '_debut').find('p').text() ? 
+                        $('#' + id + '_debut').find('p').text() :
+                        $('#' + id + '_debut_promotions_search').find('p').text() 
                     if(cmpvalue > value)
                         proceed = 0
                 }
-                else if(item === 'fin'){
-                    let cmpvalue = $('#' + id + '_fin').find('p').text()
+                else if(item === 'debut'){
+                    let cmpvalue = $('#' + id + '_fin').find('p').text() ?
+                        $('#' + id + '_fin').find('p').text() :
+                        $('#' + id + '_fin_promotions_search').find('p').text() 
                     if(cmpvalue < value)
-                        proceed = 0
+                        proceed = 0         
                 }
             }
         }
@@ -103,7 +106,7 @@ $(function(){
                 '/shop/controller/data/JSHandler.php',
                 {adm_modify:table, authtoken, id, item, value},
                 (res)=>{
-                    console.log(res)
+                    // console.log(res)
                 }
             )
             .done(()=>{
@@ -161,7 +164,6 @@ $(function(){
         let arr = stringSer.split('&')
         let form_id = $(this).attr('id').split('_')
         let table = form_id[1]
-        console.log(arr)
         if(table === 'produits'){
             var file = $('#image_form')[0].files
             if(file.length > 0 )
@@ -175,7 +177,6 @@ $(function(){
         })
         fd.append('adm_create', table)
         fd.append('authtoken', authtoken)
-        console.log(fd)
         $.ajax({
             url : '/shop/controller/data/JSHandler.php',
             type: "POST",
@@ -249,7 +250,7 @@ $(function(){
                 '/shop/controller/data/JSHandler.php',
                 {adm_delete_discount:1, nom, authtoken},
                 (res)=>{
-                    console.log(res)
+                    // console.log(res)
                     $('#promotions_det').load(' #promotions_det > *')
                 }
             )

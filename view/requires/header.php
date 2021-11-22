@@ -16,7 +16,7 @@ ob_start();
                     <button type="submit"><i class="fas fa-search"></i></button>
                 </li>
                 <li>
-                    <a href="produits/">NOS PRODUITS</a>
+                    <a href="marques/">NOS PRODUITS</a>
                 </li>
                 <li>
                     <a href="profil/">PROFIL</a>
